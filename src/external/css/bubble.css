@@ -1,0 +1,32 @@
+.bubble:before {
+    content: '';
+    position: absolute;
+    right: 100%;top: -5px;
+    width: 16px;
+    height: 24px;
+    border-width: 0;
+    border-style: solid;
+    border-color: transparent;
+    margin-right: -1px;
+    border-bottom-width: 10px;
+    border-bottom-color: currentColor;
+    border-radius: 0 0 0 48px;
+    color: rgb(217, 236, 255);
+}
+.bubble { 
+    width:100%;
+    min-height:60px;
+    background:rgb(217, 236, 255);
+    border-radius: 8px;
+    padding:10px;
+    position: relative; 
+}
+
+.bubble_usr {
+    width:60px;
+    height:60px;
+    position:absolute;
+    left: -80px;
+    top: 0px;
+    text-align: center;
+}
