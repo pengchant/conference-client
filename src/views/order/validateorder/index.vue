@@ -3,13 +3,19 @@
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
-          <el-button type="warning" @click="batchremote">删除</el-button>
-          <el-button type="success" @click="addsemester">新增</el-button>
+          <el-date-picker v-model="conditions.search.startime" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择开始日期" />
         </el-col>
-        <el-col :span="18">
+        <el-col :span="6">
+          <el-date-picker v-model="conditions.search.entime" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择结束日期" />
+        </el-col>
+        <el-col :span="12">
           <el-form :inline="true" style="float:right;">
             <el-form-item>
-              <el-input v-model="conditions.search.attrname" placeholder="请输入关键字" @keyup.enter.native="conditionsearch"/>
+              <el-input
+                v-model="conditions.search.confname"
+                placeholder="请输入会议关键字"
+                @keyup.enter.native="conditionsearch"
+              />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="conditionsearch">查询</el-button>
@@ -24,35 +30,36 @@
       border
       style="width: 100%"
       @selection-change="handleSelectionChange"
-      @sort-change="handlerSortchange">
-      <!-- 多选 -->
-      <el-table-column
-        type="selection"
-        width="40"
-        style="text-align:center;"/>
-      <el-table-column
-        prop="id"
-        label="编号"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
-        prop="attrname"
-        label="会议属性名称"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
-        prop="attrdes"
-        sortable = "custom"
-        label="会议属性描述"/>
-      <el-table-column label="操作">
+      @sort-change="handlerSortchange"
+    >
+      <el-table-column width="90" prop="conferenceid" label="编号" sortable="custom" />
+      <el-table-column prop="confname" label="会议名称" sortable="custom" />
+      <el-table-column prop="levelname" sortable="custom" label="会议级别" />
+      <el-table-column prop="recorder" sortable="custom" label="申请人" />
+      <el-table-column label="请求时间" sortable="custom" prop="colltime">
+        <template slot-scope="scope">{{ formattime(scope.row.colltime) }}</template>
+      </el-table-column>
+      <el-table-column label="操作" fixed="right" width="280">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            plain
+            type="primary"
+            @click="handleEdit(scope.$index, scope.row)"
+          >预约详情</el-button>
           <el-button
             size="mini"
+            plain
+            type="success"
+            @click="handlePass(scope.$index, scope.row)"
+          > <i class="el-icon-success" style="color:#67c23a;" />通过</el-button>
+
+          <el-button
+            size="mini"
+            plain
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleUnpass(scope.$index, scope.row)"
+          ><i class="el-icon-error" style="color:#F56C6C;"/>不通过</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,45 +70,91 @@
       :current-page="currentPage"
       background
       layout="prev, pager, next"
-      @current-change="handlecurrentchange"/>
+      @current-change="handlecurrentchange"
+    />
 
-    <!-- 修改模态框 -->
-    <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改会议属性">
-      <el-form :model="confattrform">
-        <el-form-item label-width="120px" label="会议属性编号">
-          <el-input v-model="confattrform.attrname" clearable placeholder="请输入会议属性"/>
-        </el-form-item>
-        <el-form-item label-width="120px" label="属性描述">
-          <el-input v-model="confattrform.attrdes" clearable placeholder="请输入会议属性描述"/>
-        </el-form-item>
-      </el-form>
+    <!-- 会议详情模态框 -->
+    <el-dialog :visible.sync="dialogFormVisible" width="60%" title="预约会议详情">
+      <section v-if="confdetail!=undefined">
+        <table class="mytable" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>会议名称</td>
+            <td>{{ confdetail?confdetail.basicConfInfoView.confname:'' }}</td>
+            <td>会议地点</td>
+            <td>{{ confdetail?confdetail.basicConfInfoView.roomname:'' }}</td>
+          </tr>
+          <tr>
+            <td>开始时间</td>
+            <td>{{ formattime(confdetail?confdetail.basicConfInfoView.starttime:'') }}</td>
+            <td>结束时间</td>
+            <td>{{ formattime(confdetail?confdetail.basicConfInfoView.endtime:'') }}</td>
+          </tr>
+          <tr>
+            <td>会议级别</td>
+            <td>{{ confdetail?confdetail.basicConfInfoView.levelname:'' }}</td>
+            <td>会议属性</td>
+            <td>
+              <el-tag
+                v-for="item in confdetail.confattrs"
+                :key="item.attrdes"
+                style="margin-right:5px;"
+              >{{ item.attrdes }}&nbsp;&nbsp;</el-tag>
+            </td>
+          </tr>
+          <tr>
+            <td>参会人员</td>
+            <td colspan="3">
+              <span
+                v-for="usr in confdetail.attendersViews"
+                :key="usr.workerid"
+              >{{ usr.usrname }}&nbsp;</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="4">上次会议所提议题/问题的解决情况</td>
+          </tr>
+
+          <tr
+            v-for="(item,index) in confdetail.confLastIssueViewList"
+            :key="'last_'+item.issuelastid"
+          >
+            <td class="align-center">{{ index+1 }}</td>
+            <td colspan="3">{{ item.maincontent }}</td>
+          </tr>
+          <tr>
+            <td colspan="4">本次会议需决议的议题</td>
+          </tr>
+          <tr
+            v-for="(item,index) in confdetail.confCurIssueViewsList"
+            :key="'cur_' + item.issuecurrent"
+          >
+            <td class="align-center">{{ index+1 }}</td>
+            <td colspan="3">{{ item.mainconent }}</td>
+          </tr>
+          <tr>
+            <td colspan="4">建议解决方案</td>
+          </tr>
+          <tr
+            v-for="(item,index) in confdetail.confSuggestionViewList"
+            :key="'sug_' + item.issuecurrent"
+          >
+            <td class="align-center">{{ index+1 }}</td>
+            <td colspan="3">{{ item.maincontent }}</td>
+          </tr>
+        </table>
+      </section>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="suremodify">确 定</el-button>
+        <el-button type="warning" @click="dialogFormVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
-
-    <!-- 新增模态框 -->
-    <el-dialog :visible.sync="newFormVisible" width="50%" title="新增会议属性">
-      <el-form :model="confattrform">
-        <el-form-item label-width="120px" label="会议属性编号">
-          <el-input v-model="confattrform.attrname" clearable placeholder="请输入会议属性"/>
-        </el-form-item>
-        <el-form-item label-width="120px" label="属性描述">
-          <el-input v-model="confattrform.attrdes" clearable placeholder="请输入会议属性描述"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="sureAddSemester">确 定</el-button>
-      </div>
-    </el-dialog>
+    <div style="height:50px;" />
   </div>
-
 </template>
 
 <script>
-import { getConfattrList, modifyConfattr, removeConfattr, batchrmConfattr, newConfattr } from '../../../api/sysdirectory'
+import { passOrderConf, unpassOrderConf, queryorderDetail, queryValitingConf } from '@/api/orderconf'
+
 export default {
   data() {
     return {
@@ -118,7 +171,10 @@ export default {
         page: 1,
         pagesize: 10,
         search: {
-          attrname: ''
+          confname: '',
+          endtime: '',
+          startime: '',
+          workerid: '9'
         }
       },
       // 修改表单是否隐藏
@@ -131,7 +187,9 @@ export default {
       },
 
       // 新增表单是否隐藏
-      newFormVisible: false
+      newFormVisible: false,
+
+      confdetail: ''
     }
   },
   created() {
@@ -151,107 +209,111 @@ export default {
     },
     // 分页抓取数据
     fetchData() {
-      getConfattrList(this.conditions).then(response => {
+      queryValitingConf(this.conditions).then(response => {
         const data = response.data
         this.tableData = data.list
         this.total = data.total
         this.currentPage = data.pageNum
       })
     },
-    // 编辑
+    // 模态框显示会议的具体数据
     handleEdit(index, row) {
-      this.confattrform.id = row.id
-      this.confattrform.attrname = row.attrname
-      this.confattrform.attrdes = row.attrdes
+      queryorderDetail(row.conferenceid).then(resp => {
+        // 显示具体的数据
+        this.confdetail = resp.data
+      })
       this.dialogFormVisible = true
     },
-    // 删除
-    handleDelete(index, row) {
-      const rowid = row.id
-      this.$confirm('你确定要删除' + row.attrname + '吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        removeConfattr(rowid).then(response => {
-          console.log(response)
-          this.$message.success('删除成功!')
-          // 重新fetchdata
-          this.fetchData()
-        })
-      }).catch(() => {
-        this.$message.info('已取消删除!')
-      })
-    },
-    // 批量删除
-    batchremote() {
-      const delids = this.multipleSelection.map((e, i, arr) => {
-        return e.id
-      })
-      if (delids.length > 0) {
-        this.$confirm('你确定要删除这' + delids.length + '条记录吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          batchrmConfattr(delids).then(response => {
-            if (response.ok) {
-              this.$message.success('删除成功')
-              // 重新fetchdata
-              this.fetchData()
-            } else {
-              this.$message.error(response.msg)
-            }
-          })
-        }).catch(() => {
-          this.$message.info('已取消删除!')
-        })
-      } else {
-        this.$message.warning('请先选择记录!')
-      }
-    },
-    // 处理排序
-    handlerSortchange(sortobj) {
-      this.conditions.sort = sortobj.prop // 待排序的字段
-      this.conditions.order = (sortobj.order === 'descending') ? 'desc' : (sortobj.order === 'ascending' ? 'asc' : '')
-      this.fetchData()
-    },
-    // 确定修改
-    suremodify() {
-      modifyConfattr(this.confattrform).then(response => {
-        console.log(response)
-        if (response.ok) {
-          this.$message.success('修改成功')
-          this.dialogFormVisible = false
-          // 重新featchdada
-          this.fetchData()
-        } else {
-          this.$message.error('修改失败')
-        }
-      })
-    },
+
     // 按照条件查询
     conditionsearch() {
       this.fetchData()
     },
-    // 新增
-    addsemester() {
-      this.newFormVisible = true
-      this.confattrform = {}
+
+    // 格式化时间
+    formattime(value) {
+      return value.substr(0, 16)
     },
-    // 确定新增
-    sureAddSemester() {
-      this.confattrform.id = ''
-      newConfattr(this.confattrform).then(response => {
-        if (response.ok) {
-          this.$message.success('添加成功!')
-          this.newFormVisible = false
-          this.fetchData()
-        } else {
-          this.$message.error(response.msg)
-        }
+
+    // 处理排序
+    handlerSortchange(sortobj) {
+      this.conditions.sort = sortobj.prop // 待排序的字段
+      this.conditions.order =
+        sortobj.order === 'descending'
+          ? 'desc'
+          : sortobj.order === 'ascending'
+            ? 'asc'
+            : ''
+      this.fetchData()
+    },
+
+    // 通过会议
+    handlePass(index, row) {
+      console.log(index, row)
+      this.$confirm('将通过该会议的预约，通过后不可更改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 执行通过
+        passOrderConf(row.conferenceid).then(resp => {
+          if (resp.ok) {
+            this.$message.success('执行成功!')
+            this.fetchData()
+          } else {
+            this.$message.error(resp.msg)
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+
+    // 不通过会议
+    handleUnpass(index, row) {
+      console.log(index, row)
+      this.$confirm('将不通过该会议的预约，操作后将不可更改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        unpassOrderConf(row.conferenceid).then(resp => {
+          if (resp.ok) {
+            this.$message.success('执行成功!')
+            this.fetchData()
+          } else {
+            this.$message.error(resp.msg)
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
       })
     }
   }
 }
 </script>
+
+<style scoped>
+.mytable {
+  width: 100%;
+  border: dotted 1px rgb(230, 232, 236);
+  border-right: none;
+  border-bottom: none;
+}
+.mytable td {
+  border: dotted 1px rgb(230, 232, 236);
+  border-top: none;
+  border-left: none;
+  line-height: 40px;
+}
+
+.mytable td:nth-child(2n + 1) {
+  padding-left: 3px;
+}
+</style>

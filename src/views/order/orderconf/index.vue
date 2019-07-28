@@ -997,8 +997,8 @@ export default {
       console.log('待提交的表单内容为：', this.conforderform)
       // TODO:这里需要 用户的工号 和用户的姓名
       const usr = {
-        recorderid: 9,
-        recorder: '陈鹏'
+        recorderid: 10,
+        recorder: '张萌萌'
       }
       this.conforderform = Object.assign(this.conforderform, usr)
       this.$confirm('是否确定预约会议内容，提交后将不可更改?', '提示', {

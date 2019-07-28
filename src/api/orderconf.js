@@ -75,3 +75,57 @@ export function addNewRoom(param) {
     data: param
   })
 }
+
+/**
+ * 查询已经预约过的会议
+ * @param {参数} param
+ */
+export function queryOrderedConf(param) {
+  return request({
+    url: '/order/queryorderedconf',
+    method: 'post',
+    data: param
+  })
+}
+
+export function queryorderDetail(param) {
+  return request({
+    url: '/order/' + param + '/queryorderdetail',
+    method: 'post'
+  })
+}
+
+/**
+ * 查询待验证的会议内容
+ * @param {参数} param
+ */
+export function queryValitingConf(param) {
+  return request({
+    url: '/order/queryvaliconf',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ *
+ * @param {通过} param
+ */
+export function passOrderConf(param) {
+  return request({
+    url: '/order/' + param + '/passOrderConf',
+    method: 'post'
+  })
+}
+
+/**
+ *
+ * @param {不通过} param
+ */
+export function unpassOrderConf(param) {
+  return request({
+    url: '/order/' + param + '/unpassOrderConf',
+    method: 'post'
+  })
+}
+
