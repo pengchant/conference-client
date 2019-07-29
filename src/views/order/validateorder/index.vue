@@ -26,7 +26,7 @@
     </div>
     <el-table
       :data="tableData"
-      height="500"
+      height="700"
       border
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -249,7 +249,6 @@ export default {
 
     // 通过会议
     handlePass(index, row) {
-      console.log(index, row)
       this.$confirm('将通过该会议的预约，通过后不可更改?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -274,7 +273,6 @@ export default {
 
     // 不通过会议
     handleUnpass(index, row) {
-      console.log(index, row)
       this.$confirm('将不通过该会议的预约，操作后将不可更改?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

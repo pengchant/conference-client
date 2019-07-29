@@ -324,7 +324,7 @@
             <!-- 会议室表格 -->
             <el-table
               :data="roomdata"
-              height="500"
+              height="650"
               border
               style="width: 100%">
               <el-table-column

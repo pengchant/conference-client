@@ -26,7 +26,7 @@
     </div>
     <el-table
       :data="tableData"
-      height="500"
+      height="650"
       border
       style="width: 100%"
       @selection-change="handleSelectionChange"

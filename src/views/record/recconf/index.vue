@@ -187,8 +187,11 @@
                       />
                     </el-select>
                   </el-col>
-                  <el-col :span="5">
+                  <el-col :span="5" style="text-align:center;">
                     <el-button type="primary" icon="el-icon-plus" style="margin-left:10px;" @click="newConfTitle">新增议题</el-button>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-button type="success" icon="el-icon-success" style="margin-left:10px;" @click="endRecordConf">结束会议</el-button>
                   </el-col>
                 </el-row>
 
@@ -342,7 +345,8 @@ import { usrAttend, usrcancelattend } from '@/api/comm'
 import { loadConfDetail, downloadCollect, loadAttenders } from '@/api/orderconf'
 import { newSpeachItem, uploadSpeachItem, removeVoiceRecord,
   removeSpeachItem, modifySpeachContent,
-  newcurcitlte, queryCurISSUE, saveConclusion, generateVoiceUrl, modifyHolder } from '@/api/recordconf.js'
+  newcurcitlte, queryCurISSUE, saveConclusion,
+  generateVoiceUrl, modifyHolder, endRecordConf } from '@/api/recordconf.js'
 
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
@@ -900,6 +904,29 @@ export default {
         if (response.ok !== true) {
           this.$message.error(response.msg)
         }
+      })
+    },
+
+    // 结束会议
+    endRecordConf() {
+      this.$confirm('您确定要结束会议录入吗，结束后您将无法修改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        endRecordConf(this.basicConfInfoView.confid).then(resp => {
+          if (resp.ok) {
+            this.$message.success('操作成功!')
+            this.$router.push({ path: '/dashboard' })
+          } else {
+            this.$message.error(resp.msg)
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
       })
     }
 

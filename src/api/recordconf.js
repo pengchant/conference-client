@@ -127,3 +127,14 @@ export function modifyHolder(params) {
     method: 'post'
   })
 }
+
+/**
+ * 结束会议记录
+ * @param {参数} param
+ */
+export function endRecordConf(param) {
+  return request({
+    url: '/order/' + param + '/endRecConf',
+    method: 'post'
+  })
+}
