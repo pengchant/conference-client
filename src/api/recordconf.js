@@ -138,3 +138,27 @@ export function endRecordConf(param) {
     method: 'post'
   })
 }
+
+/**
+ * 查询待验证的会议材料
+ * @param {参数} param
+ */
+export function getvaliRecord(param) {
+  return request({
+    url: '/record/getvaliRecord',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ * 查询验证通过的会议材料
+ * @param {参数} param
+ */
+export function getpassedRecord(param) {
+  return request({
+    url: '/record/getpassedRecord',
+    method: 'post',
+    data: param
+  })
+}
