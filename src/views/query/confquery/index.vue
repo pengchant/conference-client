@@ -51,14 +51,14 @@
       <el-table-column label="请求时间" sortable="custom" prop="colltime">
         <template slot-scope="scope">{{ formattime(scope.row.colltime) }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="380" fixed="right" align="center">
+      <el-table-column label="操作" width="250" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
             plain
             type="primary"
             @click="handleEdit(scope.$index, scope.row)"
-          >预约详情</el-button>
+          >查看预约</el-button>
 
           <el-button
             size="mini"
@@ -66,20 +66,21 @@
             type="warning"
             @click="handleRecord(scope.$index, scope.row)"
           >会议记录</el-button>
-
+          <br>
+          <br>
           <el-button
             size="mini"
             plain
             type="success"
-            @click="handleRecord(scope.$index, scope.row)"
-          ><i class="el-icon-success"/>&nbsp;通过</el-button>
+            @click="downloadApplication(scope.$index, scope.row)"
+          >导出预约</el-button>
+
           <el-button
             size="mini"
             plain
             type="danger"
-            @click="handleRecord(scope.$index, scope.row)"
-          ><i class="el-icon-error"/>&nbsp;不通过</el-button>
-
+            @click="downloadConfRecord(scope.$index, scope.row)"
+          >导出记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -240,7 +241,7 @@
                       <!-- 录音播放区域 -->
                       <el-card shadow="never">
                         <el-row>
-                          <el-col :span="14">
+                          <el-col :span="24">
                             <!-- 音频播放器 -->
                             <vue-audio-native
                               :show-current-time="true"
@@ -249,28 +250,6 @@
                               :autoplay="false"
                               :wait-buffer="true"
                               :url="audio.audiourl.url"
-                            />
-                          </el-col>
-                          <el-col :span="10" style="text-align:right;">
-                            <!-- 判断是否已经上传，如果已经上传就不显示上传按钮了 -->
-                            <section v-if="audio.audioid==null">
-                              <!-- 操作按钮 -->
-                              <el-button
-                                type="success"
-                                style="float:right;margin-right:20px;"
-                                icon="el-icon-upload"
-                                plain
-                                circle
-                                @click="handleUploadVoice(index, uindex, aindex)"
-                              />
-                            </section>
-                            <el-button
-                              type="danger"
-                              style="float:right;margin-right:20px;"
-                              icon="el-icon-delete"
-                              plain
-                              circle
-                              @click="handleRMVoice(index, uindex, aindex)"
                             />
                           </el-col>
                         </el-row>
@@ -300,7 +279,7 @@
 <script>
 import MRecorder from '@/components/MRecorder'
 import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
-import { queryorderDetail, loadConfDetail } from '../../../api/orderconf'
+import { queryorderDetail, loadConfDetail, downloadCollect } from '../../../api/orderconf'
 
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
@@ -575,7 +554,26 @@ export default {
           this.$message.error(response.msg)
         }
       })
+    },
+
+    // 导出会议申请表
+    downloadApplication(index, row) {
+      downloadCollect(row.conferenceid).then(data => {
+        const url = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', row.confname + '会议采集表.docx')
+        document.body.appendChild(link)
+        link.click()
+      })
+    },
+
+    // 导出会议记录
+    downloadConfRecord(index, row) {
+      alert(row.conferenceid)
     }
+
   }
 }
 </script>

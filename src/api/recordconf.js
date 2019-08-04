@@ -162,3 +162,27 @@ export function getpassedRecord(param) {
     data: param
   })
 }
+
+/**
+ * 通过会议
+ * @param {会议编号} param
+ */
+export function passRecord(param) {
+  return request({
+    url: '/record/' + param + '/passRecord',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ * 会议不归档
+ * @param {参数} param
+ */
+export function unpassRecord(param) {
+  return request({
+    url: '/record/' + param + '/unpassRecord',
+    method: 'post',
+    data: param
+  })
+}

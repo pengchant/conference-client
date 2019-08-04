@@ -71,13 +71,13 @@
             size="mini"
             plain
             type="success"
-            @click="handleRecord(scope.$index, scope.row)"
+            @click="handlePass(scope.$index, scope.row)"
           ><i class="el-icon-success"/>&nbsp;通过</el-button>
           <el-button
             size="mini"
             plain
             type="danger"
-            @click="handleRecord(scope.$index, scope.row)"
+            @click="handleUnpass(scope.$index, scope.row)"
           ><i class="el-icon-error"/>&nbsp;不通过</el-button>
 
         </template>
@@ -240,7 +240,7 @@
                       <!-- 录音播放区域 -->
                       <el-card shadow="never">
                         <el-row>
-                          <el-col :span="14">
+                          <el-col :span="24">
                             <!-- 音频播放器 -->
                             <vue-audio-native
                               :show-current-time="true"
@@ -249,28 +249,6 @@
                               :autoplay="false"
                               :wait-buffer="true"
                               :url="audio.audiourl.url"
-                            />
-                          </el-col>
-                          <el-col :span="10" style="text-align:right;">
-                            <!-- 判断是否已经上传，如果已经上传就不显示上传按钮了 -->
-                            <section v-if="audio.audioid==null">
-                              <!-- 操作按钮 -->
-                              <el-button
-                                type="success"
-                                style="float:right;margin-right:20px;"
-                                icon="el-icon-upload"
-                                plain
-                                circle
-                                @click="handleUploadVoice(index, uindex, aindex)"
-                              />
-                            </section>
-                            <el-button
-                              type="danger"
-                              style="float:right;margin-right:20px;"
-                              icon="el-icon-delete"
-                              plain
-                              circle
-                              @click="handleRMVoice(index, uindex, aindex)"
                             />
                           </el-col>
                         </el-row>
@@ -299,7 +277,7 @@
 
 <script>
 import MRecorder from '@/components/MRecorder'
-import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
+import { getvaliRecord, generateVoiceUrl, passRecord, unpassRecord } from '../../../api/recordconf'
 import { queryorderDetail, loadConfDetail } from '../../../api/orderconf'
 
 import tinymce from 'tinymce/tinymce'
@@ -476,6 +454,66 @@ export default {
             ? 'asc'
             : ''
       this.fetchData()
+    },
+
+    // 处理通过
+    handlePass(index, row) {
+      this.$confirm('是否确认通过审核?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        passRecord(row.conferenceid).then(resp => {
+          if (resp.ok) {
+            this.$message({
+              type: 'success',
+              message: '通过成功!'
+            })
+            // 重新加载数据
+            this.fetchData()
+          } else {
+            this.$message({
+              type: 'error',
+              message: resp.msg
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+
+    // 处理不通过
+    handleUnpass(index, row) {
+      this.$confirm('是否确认不通过审核?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        unpassRecord(row.conferenceid).then(resp => {
+          if (resp.ok) {
+            this.$message({
+              type: 'success',
+              message: '审核成功!'
+            })
+            // 重新加载数据
+            this.fetchData()
+          } else {
+            this.$message({
+              type: 'error',
+              message: resp.msg
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
 
     // 查询会议详情
