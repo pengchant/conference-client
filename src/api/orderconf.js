@@ -57,6 +57,17 @@ export function downloadCollect(param) {
   })
 }
 
+/**
+ * 导出会议记录内容
+ */
+export function downloadRecord(param) {
+  return request({
+    url: '/record/' + param + '/exportconfrecord',
+    method: 'post',
+    responseType: 'blob'
+  })
+}
+
 export function loadAttenders(param) {
   return request({
     url: '/record/' + param + '/getAttendursts',

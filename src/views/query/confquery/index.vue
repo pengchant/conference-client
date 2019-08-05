@@ -279,7 +279,7 @@
 <script>
 import MRecorder from '@/components/MRecorder'
 import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
-import { queryorderDetail, loadConfDetail, downloadCollect } from '../../../api/orderconf'
+import { queryorderDetail, loadConfDetail, downloadCollect, downloadRecord } from '../../../api/orderconf'
 
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
@@ -571,7 +571,15 @@ export default {
 
     // 导出会议记录
     downloadConfRecord(index, row) {
-      alert(row.conferenceid)
+      downloadRecord(row.conferenceid).then(data => {
+        const url = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', row.confname + '-会议记录.docx')
+        document.body.appendChild(link)
+        link.click()
+      })
     }
 
   }
