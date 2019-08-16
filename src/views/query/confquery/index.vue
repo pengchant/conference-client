@@ -280,6 +280,7 @@
 import MRecorder from '@/components/MRecorder'
 import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
 import { queryorderDetail, loadConfDetail, downloadCollect, downloadRecord } from '../../../api/orderconf'
+import { getpassedRecord } from '../../../api/queryconf.js'
 
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
@@ -413,7 +414,7 @@ export default {
     },
     // 分页抓取数据
     fetchData() {
-      getvaliRecord(this.conditions).then(response => {
+      getpassedRecord(this.conditions).then(response => {
         const data = response.data
         this.tableData = data.list
         this.total = data.total
