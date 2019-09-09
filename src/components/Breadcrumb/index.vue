@@ -31,22 +31,19 @@ export default {
   },
   methods: {
     // 获取面包屑列表
-    getBreadcrumb() { 
-      // 获取当前路由
-      console.log(this.$route);
-      
-      let matched = this.$route.matched.filter(item => item.name) 
+    getBreadcrumb() {
+      let matched = this.$route.matched.filter(item => item.name)
       const first = matched[0]
       // 如果没有添加首页
       if (first && first.name !== 'dashboard') {
         matched = [{ path: '/dashboard', meta: { title: '主页' }}].concat(matched)
-      } 
-      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false) 
+      }
+      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
     },
     pathCompile(path) {
-      // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561 
+      // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
       const { params } = this.$route
-      var toPath = pathToRegexp.compile(path) 
+      var toPath = pathToRegexp.compile(path)
       return toPath(params)
     },
     // 处理点击事件

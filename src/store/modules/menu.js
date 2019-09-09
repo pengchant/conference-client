@@ -49,7 +49,7 @@ export const formatRoutes = (routes) => {
     }
     // const fmRouter = {
     //   path: path,
-    //   component: () => import('@/views/table/index'),
+    //   component: () => import('@/views/dashboard/index'),
     //   name: name,
     //   meta: meta,
     //   children: children

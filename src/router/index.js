@@ -85,11 +85,11 @@ export const constantRouterMap = [
     name: 'confquery',
     redirect: 'noredirect', // 点击该路由不跳转
     meta: {
-      title: '会议档案调阅',
+      title: '归档记录查询',
       icon: 'confquery'
     },
     children: [
-      { path: '/confquery/material', meta: { title: '会议材料查询' }, name: 'material', component: () => import('@/views/query/confquery/index') }
+      { path: '/confquery/material', meta: { title: '归档记录查询' }, name: 'material', component: () => import('@/views/query/confquery/index') }
     ]
   },
 
@@ -113,8 +113,7 @@ export const constantRouterMap = [
     ]
   },
 
-  // ////////////////
-
+  // 最终如果都找不到，返回404
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -4,7 +4,7 @@ import store from '../store'
 import { getToken } from '@/utils/auth'
 
 const service = axios.create({
-  baseURL: 'http://localhost:9999/',
+  baseURL: 'http://localhost:9999/conferencem/',
   timeout: 5000
 })
 
@@ -37,7 +37,7 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
 
-        if (res.status === 502) {
+        if (res.status === 401) {
           MessageBox.confirm(
             '你已被登出，可以取消继续留在该页面，或者重新登录',
             '确定登出',

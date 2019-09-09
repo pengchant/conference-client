@@ -140,3 +140,23 @@ export function unpassOrderConf(param) {
   })
 }
 
+/**
+ * 加载当前用户部门下的所有的用户
+ * @param {当前用户的编号} param
+ */
+export function loadDepUsers(param) {
+  return request({
+    url: '/comm/getcurdepusr/' + param,
+    method: 'post'
+  })
+}
+
+/**
+ * 删除用户提交的额会议预约
+ */
+export function removeOrderConf(param) {
+  return request({
+    url: '/order/' + param + '/removeOrderConf',
+    method: 'post'
+  })
+}

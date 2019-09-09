@@ -120,12 +120,10 @@ export default {
   created() {
     // 获取我的所有的会议预约
     getallOrder(9).then(response => {
-      console.log(response)
       this.myorderdata = response.data
     })
     // 获取即将开始的会议
     getallCommingOrder(9).then(response => {
-      console.log(response)
       this.commingconf = response.data
     })
   },

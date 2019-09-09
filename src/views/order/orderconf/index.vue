@@ -19,13 +19,13 @@
         <div style="padding:30px;">
           <el-form ref="conforderform" :model="conforderform" label-width="120px">
             <el-row>
-              <el-col :span="8">
+              <!-- <el-col :span="8">
                 <el-form-item label="学年">
                   <el-input v-model="conforderform.years" placeholder="学年" clearable/>
                 </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="学期">
+              </el-col> -->
+              <el-col :span="9">
+                <el-form-item label="学年">
                   <el-select
                     v-model="conforderform.semesterid"
                     style="width:100%;"
@@ -39,19 +39,27 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="周数">
-                  <el-input v-model="conforderform.weeksno" placeholder="请输入周数" clearable/>
+              <el-col :span="9">
+                <el-form-item label="会议日期">
+                  <el-date-picker
+                    v-model="conforderform.weeksno"
+                    style="width:100%"
+                    type="date"
+                    placeholder="选择会议日期"
+                    value-format="yyyy-MM-dd"/>
                 </el-form-item>
+                <!-- <el-form-item label="会议日期">
+                  <el-input v-model="conforderform.weeksno" placeholder="请输入周数" clearable/>
+                </el-form-item> -->
               </el-col>
             </el-row>
 
             <el-form-item label="会议名称">
-              <el-input v-model="conforderform.confname" placeholder="请输入会议名称" clearable/>
+              <el-input v-model="conforderform.confname" style="width:80%;" placeholder="请输入会议名称" clearable/>
             </el-form-item>
 
-            <el-form-item label="会议级别">
-              <el-select v-model="conforderform.conflevel" style="width:100%;" placeholder="请选择会议的级别">
+            <el-form-item label="会议类别">
+              <el-select v-model="conforderform.conflevel" style="width:80%;" placeholder="请选择会议的会议类别">
                 <el-option
                   v-for="item in conflevels"
                   :key="item.id"
@@ -63,7 +71,7 @@
             <el-form-item label="会议属性">
               <el-select
                 v-model="conforderform.confattrs"
-                style="width:100%;"
+                style="width:80%;"
                 multiple
                 placeholder="请选择会议属性">
                 <el-option
@@ -75,42 +83,52 @@
             </el-form-item>
 
             <!-- 开始和结束时间-->
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="开始时间">
-                  <el-date-picker
+            <el-form-item label="起止时间">
+              <el-row>
+                <el-col :span="7">
+                  <el-time-select
                     v-model="conforderform.starttime"
-                    style="width:100%"
-                    type="datetime"
-                    placeholder="选择开始时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    default-time="12:00:00"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="结束时间">
-                  <el-date-picker
+                    :picker-options="{
+                      start: '08:30',
+                      step: '00:15',
+                      end: '18:30'
+                    }"
+                    placeholder="起始时间"/>
+                </el-col>
+                <el-col :span="1" >至</el-col>
+                <el-col :span="7">
+                  <el-time-select
                     v-model="conforderform.endtime"
-                    style="width:100%"
-                    type="datetime"
-                    placeholder="选择结束时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    default-time="12:00:00"/>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-form-item label="会议召集人">
-              <el-input v-model="conforderform.leadername" placeholder="请输入会议召集人" clearable/>
+                    :picker-options="{
+                      start: '08:30',
+                      step: '00:15',
+                      end: '18:30',
+                      minTime: conforderform.starttime
+                    }"
+                    placeholder="结束时间"/>
+                </el-col>
+              </el-row>
             </el-form-item>
 
-            <el-form-item label="上次所提议题" >
+            <!-- 会议召集人，默认为当前登录用户，下拉选择 -->
+            <el-form-item label="会议召集人">
+              <el-select v-model="conforderform.leadername" style="width:40%;" placeholder="请选择会议召集人">
+                <el-option
+                  v-for="item in depusers"
+                  :key="item.accid"
+                  :label="item.usrname"
+                  :value="item.accid"/>
+              </el-select>
+              <!-- <el-input v-model="conforderform.leadername" style="width:40%;" placeholder="请输入会议召集人" clearable/> -->
+            </el-form-item>
+
+            <el-form-item label="议题" >
               <!-- 渲染问题列表 -->
               <section v-for="(value, index) in conforderform.lastquestions" :key="index">
                 <section v-if="index === 0">
                   <el-row>
                     <el-col :span="15">
-                      <el-input v-model="conforderform.lastquestions[index]" placeholder="请输入上次所提议题" clearable @keyup.enter.native="addlastitems(index, '1')"/>
+                      <el-input v-model="conforderform.lastquestions[index]" placeholder="请输入议题" clearable @keyup.enter.native="addlastitems(index, '1')"/>
                     </el-col>
                     <el-col :span="4">
                       <el-button type="primary" icon="el-icon-plus" plain style="margin-left:10px;" circle @click="addlastitems(index, '1')"/>
@@ -197,31 +215,17 @@
     <div v-if="stepnum===2" class="content">
 
       <!-- 选择时间模态框 -->
-      <el-dialog :visible.sync="dialogTableVisible" top="3vh" width="80%" title="选择会议时间">
-        <div
-          style="text-align: center;
-            padding: 20px;
-            color: rgb(245, 108, 108);
-            font-weight: 500;
-            font-size: 17px;
-            margin-top: -40px;">
-          <i class="el-icon-bell" />您当前选择
-          <el-tag type="primary" style="font-size:17px;">{{ (conforderform.selectedroom==='') ? '--' : conforderform.selectedroom }}</el-tag>,
-          开会的时间范围为
-          <el-tag type="success" style="font-size:17px;">{{ (conforderform.starttime==='') ? '--' : conforderform.starttime }}</el-tag>
-          至
-          <el-tag type="success" style="font-size:17px;"> {{ (conforderform.endtime==='') ? '--' : conforderform.endtime }}</el-tag>
-        </div>
+      <el-dialog :visible.sync="dialogTableVisible" top="3vh" width="80%" title="查看会议室预约详情">
         <!-- 自己封装的小组件选择时间 -->
         <PickTimer
           :event-list="curRoomEvents"
           @selectTimeRange="handlerselectTimeRange"
           @cancelselect="handlecancelselect"/>
-        <!-- 底部按钮，确定选择时间 -->
-        <div style="text-align:center; margin-top:20px; ">
+          <!-- 底部按钮，确定选择时间 -->
+          <!-- <div style="text-align:center; margin-top:20px; ">
           <el-button type="primary" @click="handleSureSelect">确定</el-button>
           <el-button type="warning" @click="cancelSelectClose">取消</el-button>
-        </div>
+        </div> -->
       </el-dialog>
 
       <!-- 新增会议室模态框 -->
@@ -263,7 +267,9 @@
       <!-- 选择会议室 -->
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          选择会议室
+          <span>选择会议室</span>
+          <!-- 新增会议室按钮 -->
+          <el-button style="float:right;" type="primary" @click="newMeetRoom"><i class="el-icon-circle-plus"/>&nbsp;新增会议室</el-button>
           <div
             style="text-align: center;
                 padding: 10px;
@@ -271,12 +277,9 @@
                 font-weight: 500;
                 font-size: 17px; ">
             <i class="el-icon-bell" />您当前选择
-            <el-tag type="primary" style="font-size:17px;">{{ (conforderform.selectedroom ==='') ? '--' : conforderform.selectedroom }}</el-tag>,
-            开会的时间范围为
-            <el-tag type="success" style="font-size:17px;">{{ (conforderform.starttime==='') ? '--' : conforderform.starttime }}</el-tag>
-            至
-            <el-tag type="success" style="font-size:17px;"> {{ (conforderform.endtime==='') ? '--' : conforderform.endtime }}</el-tag>
+            <el-tag type="primary" style="font-size:17px;">{{ (conforderform.selectedroom ==='') ? '--' : conforderform.selectedroom }}</el-tag>
           </div>
+
         </div>
         <div>
           <el-form label-width="80px">
@@ -292,10 +295,6 @@
                     :value="item.id"/>
                 </el-select>
               </el-form-item>
-              <el-form-item>
-                <!-- 新增会议室按钮 -->
-                <el-button style="float:right;" type="danger" @click="newMeetRoom">新增会议室</el-button>
-              </el-form-item>
               <br>
 
               <!-- 筛选的条件 -->
@@ -306,7 +305,7 @@
                 <button :class="'mybtn '+ (confroomcondition.search.yjt?'mybtn_active':'')" type="button" @click="confroomcondition.search.yjt = !(confroomcondition.search.yjt)"><svg-icon icon-class="yj" />&nbsp;演讲台</button>
                 <button :class="'mybtn '+ (confroomcondition.search.yx?'mybtn_active':'')" type="button" @click="confroomcondition.search.yx = !(confroomcondition.search.yx)"><svg-icon icon-class="yx" />&nbsp;音响</button>
                 <button :class="'mybtn '+ (confroomcondition.search.zmsb?'mybtn_active':'')" type="button" @click="confroomcondition.search.zmsb = !(confroomcondition.search.zmsb)"><svg-icon icon-class="zmsb" />&nbsp;照明设备</button>
-                <el-button type="warning" round style="margin-left:10px;" @click="handlerSelectAllOr">全选/全不选</el-button>
+                <el-button type="default" style="margin-left:30px;" @click="handlerSelectAllOr">全选/全不选</el-button>
               </el-form-item>
               <br>
               <el-form-item label="容纳人数">
@@ -316,8 +315,9 @@
                   style="width:500px;"
                   show-input/>
               </el-form-item>
-              <el-form-item style="float:right;">
-                <el-button type="primary" @click="handleSearch"><i class="el-icon-search" />&nbsp;筛选查询</el-button>
+              <br>
+              <el-form-item style="float:left;">
+                <el-button type="warning" @click="handleSearch"><i class="el-icon-search" />&nbsp;筛选查询</el-button>
               </el-form-item>
             </el-form>
 
@@ -335,13 +335,14 @@
                 prop="departname"
                 label="隶属部门" />
               <el-table-column
+                width="100"
                 prop="maxcontain"
                 sortable
                 label="座位数"
               />
               <el-table-column
                 prop="aircondition"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="空调">
@@ -356,7 +357,7 @@
               </el-table-column>
               <el-table-column
                 prop="projector"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="投影仪">
@@ -371,7 +372,7 @@
               </el-table-column>
               <el-table-column
                 prop="microphone"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="麦克风">
@@ -386,7 +387,7 @@
               </el-table-column>
               <el-table-column
                 prop="stereo"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="音响">
@@ -401,7 +402,7 @@
               </el-table-column>
               <el-table-column
                 prop="podium"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="演讲台">
@@ -416,7 +417,7 @@
               </el-table-column>
               <el-table-column
                 prop="lightequ"
-                width="100"
+                width="50"
                 align="center"
                 header-align="center"
                 label="照明设备">
@@ -431,13 +432,20 @@
               </el-table-column>
               <el-table-column
                 label="操作"
+                width="270"
                 align="center"
                 header-align="center">
                 <template slot-scope="scope">
+                  <!-- 选择会议室按钮 -->
                   <el-button
                     size="mini"
                     type="primary"
-                    @click="handleSelectRoom(scope.$index, scope.row)"><i class="el-icon-success" />&nbsp;选择</el-button>
+                    @click="sbhandleSelectRoom(scope.$index, scope.row)"><i class="el-icon-success" />&nbsp;选择会议室</el-button>
+                  <!-- 查看已经预约 -->
+                  <el-button
+                    size="mini"
+                    type="success"
+                    @click="handleSelectRoom(scope.$index, scope.row)"><i class="el-icon-success" />&nbsp;已预约</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -512,7 +520,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="warning" @click="onSelectUsrSubmit"><i class="el-icon-search" />&nbsp;查询</el-button>
+              <el-button type="success" @click="onSelectUsrSubmit"><i class="el-icon-search" />&nbsp;查询</el-button>
             </el-form-item>
           </el-form>
           <el-form label-width="80px">
@@ -523,7 +531,7 @@
                     <div slot="header" class="clearfix">
                       <span style="color:#F56C6C;"><svg-icon icon-class="shalou" />&nbsp;选择人员</span>
                       <!-- 确定选中 -->
-                      <el-button size="mini" style="float:right;" type="primary" @click="handleChoosingMulti">选择人员</el-button>
+                      <el-button style="float:right;" type="warning" @click="handleChoosingMulti">批量选择人员<i class="el-icon-d-arrow-right"/></el-button>
                     </div>
                     <!-- 加载人员 -->
                     <el-table
@@ -545,7 +553,9 @@
                         label="操作"
                         align="center">
                         <template slot-scope="scope">
-                          <section v-if="scope.row.selected === true"/>
+                          <section v-if="scope.row.selected === true">
+                            <span>已选择</span>
+                          </section>
                           <section v-else >
                             <el-button
                               type="success"
@@ -553,7 +563,6 @@
                               @click="selectUsr(scope.row)"
                             >选择</el-button>
                           </section>
-
                         </template>
                       </el-table-column>
                     </el-table>
@@ -643,9 +652,9 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import { getallconflevel, getallconfattr, getalldep, getallDuty, getallposition, getallsemesters } from '@/api/comm'
-import { getRoomList, getRoomArange, getPeopleSelect, sureSubmitOrder, addNewRoom } from '@/api/orderconf'
+import { getRoomList, getRoomArange, getPeopleSelect, sureSubmitOrder, addNewRoom, loadDepUsers } from '@/api/orderconf'
 import PickTimer from '@/components/PickTimer'
 // 硬件条件
 const hdcondtions = ['空调', '投影仪', '麦克风', '音响', '演讲台', '照明设备']
@@ -694,6 +703,8 @@ export default {
       mpositions: [],
       // 职务
       mdutys: [],
+      // 当前用户所在部门的所有用户
+      depusers: [],
 
       currentPage: 1, // 当前页面
       total: 1000, // 总记录数
@@ -753,6 +764,12 @@ export default {
       cleartimerid: null
     }
   },
+  computed: {
+    ...mapGetters([
+      'name',
+      'accid'
+    ])
+  },
   created() {
     // 获取所有的会议属性
     getallconfattr().then(response => {
@@ -778,20 +795,33 @@ export default {
     getallDuty().then(response => {
       this.mdutys = response.data
     })
-
     // 获取数据
     this.fetchdata()
     // 获取待选择的用户信息
     this.fetchUsrSelecting()
+
+    // 获取当前用户所在部门下的所有用户
+    this.fetchDepUsers()
   },
   destroyed: function() {
     // 清除计时器
     clearInterval(this.cleartimerid)
   },
   methods: {
+    // 条件查询
     handleSearch() {
       this.fetchdata()
     },
+    // 获取当前用户所在部门的所有的用户
+    fetchDepUsers() {
+      loadDepUsers(this.accid).then(response => {
+        this.depusers = response.data
+        // 设置用户名
+        this.conforderform.leadername = String(this.accid)
+        console.log('当前==>', this.conforderform.leadername)
+      })
+    },
+
     fetchdata() {
       // 获取所有的会议
       getRoomList(this.confroomcondition).then(response => {
@@ -894,11 +924,25 @@ export default {
             color: 'red'
           }
         })
-        // 标记当前选择的会议室编号和会议室的名称
-        this.conforderform.selectedroomid = row.id
-        this.conforderform.selectedroom = row.roomname
       })
     },
+    // 选择会议室
+    sbhandleSelectRoom(index, row) {
+      this.$confirm('确定选择会议室【' + row.roomname + '】?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 选择会议室
+        this.conforderform.selectedroomid = row.id
+        this.conforderform.selectedroom = row.roomname
+      }).catch(() => {
+        this.conforderform.selectedroomid = ''
+        this.conforderform.selectedroom = ''
+        this.$message.info('已取消选择')
+      })
+    },
+
     formatDate(date) {
       if (date instanceof Date) {
         return date.getFullYear() + '-' +
@@ -912,8 +956,8 @@ export default {
     },
     // 当选择完时间后
     handlerselectTimeRange(info) {
-      this.conforderform.starttime = info.startStr.replace('T', ' ').substr(0, 19)
-      this.conforderform.endtime = info.endStr.replace('T', ' ').substr(0, 19)
+      // this.conforderform.starttime = info.startStr.replace('T', ' ').substr(0, 19)
+      // this.conforderform.endtime = info.endStr.replace('T', ' ').substr(0, 19)
     },
     // 取消选择
     handlecancelselect() {
@@ -995,11 +1039,13 @@ export default {
         this.conforderform.selectAttenders.push(val.workerid)
       })
       console.log('待提交的表单内容为：', this.conforderform)
+
       // TODO:这里需要 用户的工号 和用户的姓名
       const usr = {
-        recorderid: 9,
-        recorder: '陈鹏'
+        recorderid: this.accid,
+        recorder: this.name
       }
+
       this.conforderform = Object.assign(this.conforderform, usr)
       this.$confirm('是否确定预约会议内容，提交后将不可更改?', '提示', {
         confirmButtonText: '确定',

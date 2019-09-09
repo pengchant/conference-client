@@ -73,10 +73,10 @@
         :model="loginForm"
         :rules="loginRules"
         class="login-form"
-        auto-complete="on"
+        auto-complete="off"
         label-position="left">
 
-        <h3 class="title">党政云会议系统</h3>
+        <h3 class="title">智慧校园高校党政会议云记录管理系统</h3>
 
         <el-form-item prop="username">
           <span class="svg-container">
@@ -173,8 +173,8 @@ export default {
     return {
       // 登录表单
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
       },
       // 表单验证规则
       loginRules: {
@@ -195,6 +195,7 @@ export default {
       pwdType: 'password',
       redirect: undefined, // 重定向的地址
       dialogVisible: false, // 标记对话框是否隐藏
+
       registinfo: {
         workername: '', // 姓名
         workerid: '', // 工号
@@ -203,16 +204,17 @@ export default {
         password: '', // 密码
         confirmpass: '' // 确认密码
       }, // 注册的信息
+
       departments: [], // 加载的部门信息
       positions: [], // 加载的职位信息
       validateimg: false // 验证图片是否通过
     }
   },
   watch: {
+    // 如果用户访问了没有权限的目标页面，就先暂时保存到this.redirect中，待登录成功后继续跳转
     $route: {
       handler: function(route) {
         this.redirect = route.query && route.query.redirect
-        console.log(this.redirect)
       },
       immediate: true
     }
@@ -236,8 +238,7 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-            // 执行页面跳转
-            console.log('开始页面跳转')
+            // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false

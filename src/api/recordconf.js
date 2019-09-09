@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import axios from 'axios'
 
-const BASEURL = 'http://localhost:9999'
+const BASEURL = 'http://localhost:9999/conferencem/'
 
 /**
  *  新增会议议题
@@ -42,7 +42,7 @@ export function removeSpeachItem(params) {
 export function uploadSpeachItem(params, afterfunc) {
   const formData = new FormData()
   formData.append('voice', params.voice)
-  const url = 'http://localhost:9999/record/' + params.confrecid + '/uploadUsrVoice'
+  const url = BASEURL + '/record/' + params.confrecid + '/uploadUsrVoice'
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }

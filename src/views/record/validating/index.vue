@@ -250,14 +250,6 @@
                                 @click="handleUploadVoice(index, uindex, aindex)"
                               />
                             </section>
-                            <el-button
-                              type="danger"
-                              style="float:right;margin-right:20px;"
-                              icon="el-icon-delete"
-                              plain
-                              circle
-                              @click="handleRMVoice(index, uindex, aindex)"
-                            />
                           </el-col>
                         </el-row>
                       </el-card>
@@ -284,6 +276,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import MRecorder from '@/components/MRecorder'
 import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
 import { queryorderDetail, loadConfDetail } from '../../../api/orderconf'
@@ -400,10 +393,18 @@ export default {
       confdetail: ''
     }
   },
+  computed: {
+    ...mapGetters([
+      'name',
+      'accid'
+    ])
+  },
   mounted() {
     tinymce.init({})
   },
   created() {
+    // 设置用户id和用户名
+    this.conditions.search.workerid = this.accid
     // 抓取数据
     this.fetchData()
   },

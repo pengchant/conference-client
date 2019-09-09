@@ -153,6 +153,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { passOrderConf, unpassOrderConf, queryorderDetail, queryValitingConf } from '@/api/orderconf'
 
 export default {
@@ -174,7 +175,7 @@ export default {
           confname: '',
           endtime: '',
           startime: '',
-          workerid: '9'
+          workerid: '0'
         }
       },
       // 修改表单是否隐藏
@@ -192,7 +193,15 @@ export default {
       confdetail: ''
     }
   },
+  computed: {
+    ...mapGetters([
+      'name',
+      'accid'
+    ])
+  },
   created() {
+    // 读取当前用户
+    this.conditions.search.workerid = this.accid
     // 抓取数据
     this.fetchData()
   },

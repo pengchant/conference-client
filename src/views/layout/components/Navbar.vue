@@ -3,7 +3,9 @@
   <div class="navbar">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
+
     <el-dropdown class="avatar-container" trigger="click">
+      <span class="musername">{{ name }} ,欢迎回来</span>
       <div class="avatar-wrapper">
         <i class="el-icon-caret-bottom"/>
       </div>
@@ -34,8 +36,13 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
+  },
+  created: function() {
+    // 加载用户信息
+    this.$store.dispatch('GetInfo')
   },
   methods: {
     toggleSideBar() {
@@ -91,5 +98,25 @@ export default {
     }
   }
 }
+</style>
+
+<style scoped>
+  .musername {
+    min-width: 150px;
+    position: absolute;
+    right: -10px;
+    top: 0px;
+    display: inline-block;
+    cursor: pointer;
+    text-align: right;
+    padding-right:5px;
+  }
+
+  .navbar .avatar-container .avatar-wrapper .el-icon-caret-bottom {
+    position: absolute;
+    right: -20px;
+    top: 13px !important;
+    font-size: 12px;
+  }
 </style>
 
