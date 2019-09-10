@@ -2,15 +2,15 @@
   <div style="padding:20px;">
     <el-container>
       <el-main style="padding:0px;">
-        <el-card
-          :body-style="{ padding: '20px' }"
-          shadow="never"
-          class="box-card">
-
+        <el-card :body-style="{ padding: '20px' }" shadow="never" class="box-card">
           <table class="mytable" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td style="width:120px;">会议名称</td>
-              <td class="align-center" colspan="5" style="color:red;font-weight:700;font-size:20px;">{{ basicConfInfoView.confname }}</td>
+              <td
+                class="align-center"
+                colspan="5"
+                style="color:red;font-weight:700;font-size:20px;"
+              >{{ basicConfInfoView.confname }}</td>
             </tr>
             <tr>
               <td>学期</td>
@@ -19,7 +19,11 @@
             <tr>
               <td>会议属性</td>
               <td colspan="5">
-                <el-tag v-for="item in confattrs" :key="item.attrdes" style="margin-left:20px;">{{ item.attrdes }}</el-tag>
+                <el-tag
+                  v-for="item in confattrs"
+                  :key="item.attrdes"
+                  style="margin-left:20px;"
+                >{{ item.attrdes }}</el-tag>
               </td>
             </tr>
             <tr>
@@ -31,81 +35,79 @@
                   v-model="basicConfInfoView.hosterid"
                   style="width:100%;border:none;"
                   placeholder="请选择主持人"
-                  @change="modifyholder">
+                  @change="modifyholder"
+                >
                   <el-option
                     v-for="item in attendersViews"
                     :key="item.workerid"
                     :label="item.usrname"
-                    :value="item.workerid"/>
+                    :value="item.workerid"
+                  />
                 </el-select>
               </td>
               <td style="width:100px;">录入人</td>
               <td>
-                <el-select v-model="basicConfInfoView.recorderid" style="width:100%;border:none;" placeholder="请选择录入人">
+                <el-select
+                  v-model="basicConfInfoView.recorderid"
+                  style="width:100%;border:none;"
+                  placeholder="请选择录入人"
+                >
                   <el-option
                     v-for="item in attendersViews"
                     :key="item.workerid"
                     :label="item.usrname"
-                    :value="item.workerid"/>
+                    :value="item.workerid"
+                  />
                 </el-select>
               </td>
             </tr>
             <tr>
               <td>会议地点</td>
-              <td>
-                {{ basicConfInfoView.roomname }}
-              </td>
+              <td>{{ basicConfInfoView.roomname }}</td>
               <td>开始时间</td>
-              <td>
-                {{ basicConfInfoView.starttime.substr(0, 19) }}
-              </td>
+              <td>{{ basicConfInfoView.starttime.substr(0, 19) }}</td>
               <td>结束时间</td>
-              <td>
-                {{ basicConfInfoView.endtime.substr(0, 19) }}
-              </td>
+              <td>{{ basicConfInfoView.endtime.substr(0, 19) }}</td>
             </tr>
           </table>
-
         </el-card>
       </el-main>
     </el-container>
-    <el-container >
+    <el-container>
       <el-aside width="290px">
-        <el-card
-          :body-style="{ padding: '0px' }"
-          class="box-card"
-          style="min-height:200px;" >
+        <el-card :body-style="{ padding: '0px' }" class="box-card" style="min-height:200px;">
           <div slot="header" class="clearfix">
             <span>参会人员</span>
           </div>
-          <el-table
-            :data="attendersViews"
-            :show-header="false"
-            border
-            style="width: 100%">
-            <el-table-column
-              prop="usrname"
-            />
-            <el-table-column
-              width="180"
-              align="center">
+          <el-table :data="attendersViews" :show-header="false" border style="width: 100%">
+            <el-table-column prop="usrname" />
+            <el-table-column width="180" align="center">
               <template slot-scope="scope">
                 <!-- workerid, usrname, hasattend -->
                 <span v-if="scope.row.hasattend==='1'">
                   <el-button
                     type="danger"
                     size="mini"
-                    @click="handleCancelAttend(scope.$index, scope.row)"><i class="el-icon-error" />&nbsp;取消</el-button>
+                    @click="handleCancelAttend(scope.$index, scope.row)"
+                  >
+                    <i class="el-icon-error" />&nbsp;取消
+                  </el-button>
                   <el-button
                     type="success"
                     size="mini"
-                    @click="handleClicked(scope.$index, scope.row)"><i class="el-icon-edit-outline" />&nbsp;发言</el-button>
+                    @click="handleClicked(scope.$index, scope.row)"
+                  >
+                    <i class="el-icon-edit-outline" />&nbsp;发言
+                  </el-button>
                 </span>
                 <span v-else>
                   <el-button
                     type="primary"
                     size="mini"
-                    @click="handleAttend(scope.$index, scope.row)"><i class="el-icon-success" />&nbsp;签到</el-button>
+                    @click="handleAttend(scope.$index, scope.row)"
+                  >
+                    <i class="el-icon-success" />&nbsp;签到
+                  </el-button>
                 </span>
               </template>
             </el-table-column>
@@ -114,26 +116,18 @@
       </el-aside>
       <el-container>
         <el-main style="padding:0px;">
-          <el-card
-            :body-style="{ padding: '20px' }"
-            class="box-card">
-
+          <el-card :body-style="{ padding: '20px' }" class="box-card">
             <!--//////////////////////////动态切换tab标签////////////////////////////////////////// -->
-            <el-tabs v-model="activeName" type="card" >
-
+            <el-tabs v-model="activeName" type="card">
               <!-- 会议议题采集 -->
               <el-tab-pane label="议题采集表格" name="first">
                 <!-- 我的表格1 -->
                 <table class="mytable" border="0" cellspacing="0" cellpadding="0">
                   <tr>
-                    <td colspan="2" class="align-center">
-                      {{ basicConfInfoView.confname }}会议议题采集表
-                    </td>
+                    <td colspan="2" class="align-center">{{ basicConfInfoView.confname }}会议议题采集表</td>
                   </tr>
                   <tr>
-                    <td colspan="2">
-                      一、院领导姓名：{{ confCollectBasicInfoView.collegeleader }}
-                    </td>
+                    <td colspan="2">一、院领导姓名：{{ confCollectBasicInfoView.collegeleader }}</td>
                   </tr>
                   <tr>
                     <td colspan="2">二、上次会议所提议题/问题的解决情况</td>
@@ -142,7 +136,7 @@
                   <!-- 加载二、上次会议所提议题/问题的解决情况 -->
                   <tr v-for="(item,index) in confLastIssueViewList" :key="'last_'+item.issuelastid">
                     <td style="width:30px;" class="align-center">{{ index+1 }}</td>
-                    <td >{{ item.maincontent }}</td>
+                    <td>{{ item.maincontent }}</td>
                   </tr>
 
                   <tr>
@@ -150,9 +144,12 @@
                   </tr>
 
                   <!-- 加载二、本次会议需决议的议题 -->
-                  <tr v-for="(item,index) in confCurIssueViewsList" :key="'cur_' + item.issuecurrent">
+                  <tr
+                    v-for="(item,index) in confCurIssueViewsList"
+                    :key="'cur_' + item.issuecurrent"
+                  >
                     <td style="width:30px;" class="align-center">{{ index+1 }}</td>
-                    <td >{{ item.mainconent }}</td>
+                    <td>{{ item.mainconent }}</td>
                   </tr>
 
                   <tr>
@@ -160,51 +157,69 @@
                   </tr>
 
                   <!-- 加载三、建议解决方案 -->
-                  <tr v-for="(item,index) in confSuggestionViewList" :key="'sug_' + item.issuecurrent">
+                  <tr
+                    v-for="(item,index) in confSuggestionViewList"
+                    :key="'sug_' + item.issuecurrent"
+                  >
                     <td style="width:30px;" class="align-center">{{ index+1 }}</td>
-                    <td >{{ item.maincontent }}</td>
+                    <td>{{ item.maincontent }}</td>
                   </tr>
                 </table>
                 <div style="margin-top:20px;text-align:center;">
-                  <el-button type="primary" @click="exportcollect"><i class="el-icon-download" />导出议题采集表</el-button>
+                  <el-button type="primary" @click="exportcollect">
+                    <i class="el-icon-download" />导出议题采集表
+                  </el-button>
                 </div>
               </el-tab-pane>
 
               <!-- 录入会议内容 -->
               <el-tab-pane label="记录会议内容" name="second">
                 <el-row style="margin-top:10px;margin-bottom:10px;">
-                  <el-col :span="3" style="text-align:center;">
-                    <span style="line-height:37px;">选择会议议题</span>
-                  </el-col>
-                  <el-col :span="10">
+                  <el-col :span="16" style="text-align:center;">
+                    <FlagPager
+                      :titles="confCurIssueViewsList"
+                      titlekey="issuecurrent"
+                      titlevalue="mainconent"
+                      @triggerafter = "handleAfter"
+                      @triggerbefore = "handleBefore"
+                    />
                     <!-- 输入议题 -->
-                    <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
+                    <!-- <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
+
                       <el-option
                         v-for="item in confCurIssueViewsList"
                         :key="item.issuecurrent"
                         :label="item.mainconent"
                         :value="item.mainconent"
                       />
-                    </el-select>
+
+                    </el-select>-->
                   </el-col>
-                  <el-col :span="5" style="text-align:center;">
-                    <el-button type="primary" icon="el-icon-plus" style="margin-left:10px;" @click="newConfTitle">新增议题</el-button>
+                  <el-col :span="4" style="text-align:center;">
+                    <el-button
+                      type="primary"
+                      icon="el-icon-plus"
+                      style="margin-left:10px;"
+                      @click="newConfTitle"
+                    >新增议题</el-button>
                   </el-col>
-                  <el-col :span="5">
-                    <el-button type="success" icon="el-icon-success" style="margin-left:10px;" @click="endRecordConf">结束会议</el-button>
+                  <el-col :span="4">
+                    <el-button
+                      type="success"
+                      icon="el-icon-success"
+                      style="margin-left:10px;"
+                      @click="endRecordConf"
+                    >结束会议</el-button>
                   </el-col>
                 </el-row>
 
                 <!-- 会议记录功能区域 -->
                 <div class="speechsection">
-
                   <div v-for="(value, index) in recordlist" :key="index">
-
                     <!-- ///////////////////////////如果选中了某个会议议题////////////////////////////// -->
                     <section v-if="value.conftitle === curtitle">
                       <!-- 会议记录内容部分 -->
-                      <el-form >
-
+                      <el-form>
                         <!-- //////////////////////////////加载用户会话列表/////////////////////////// -->
                         <section v-for="(uspeach, uindex) in value.speachlist" :key="uindex">
                           <!-- 录入会议表单区域 -->
@@ -214,14 +229,19 @@
                               <el-col :span="3" style="text-align:center;">
                                 <div>
                                   <svg-icon icon-class="fy_usr" style="font-size:40px;" />
-                                  <br>
-                                  <span style="display:block;margin-top:-20px;">
-                                    {{ uspeach.speakername ||'请选择发言人' }}
-                                  </span>
+                                  <br >
+                                  <span
+                                    style="display:block;margin-top:-20px;"
+                                  >{{ uspeach.speakername ||'请选择发言人' }}</span>
                                 </div>
                               </el-col>
                               <el-col :span="13">
-                                <el-input :rows="5" v-model="uspeach.content" type="textarea" placeholder="请输入发言内容"/>
+                                <el-input
+                                  :rows="5"
+                                  v-model="uspeach.content"
+                                  type="textarea"
+                                  placeholder="请输入发言内容"
+                                />
                               </el-col>
                               <el-col :span="4">
                                 <!-- 录音笔 -->
@@ -234,21 +254,24 @@
                                     plain
                                     style="float:right;margin-top:20px;margin-right:20px;"
                                     type="primary"
-                                    @click="handleSaveRecitem(index, uindex)">保存</el-button>
+                                    @click="handleSaveRecitem(index, uindex)"
+                                  >保存</el-button>
                                 </section>
                                 <section v-else>
                                   <el-button
                                     plain
                                     style="float:right;margin-top:20px;margin-right:20px;"
                                     type="success"
-                                    @click="handleModifyRecitem(index, uindex)">修改</el-button>
+                                    @click="handleModifyRecitem(index, uindex)"
+                                  >修改</el-button>
                                 </section>
 
                                 <el-button
                                   plain
                                   style="float:right;margin-top:20px;margin-right:20px;"
                                   type="danger"
-                                  @click="handleRemoveRecitem(index, uindex, value.recordid, uspeach.speechid)">删除</el-button>
+                                  @click="handleRemoveRecitem(index, uindex, value.recordid, uspeach.speechid)"
+                                >删除</el-button>
                               </el-col>
                             </el-row>
                           </el-form-item>
@@ -266,7 +289,8 @@
                                     :show-download="true"
                                     :autoplay="false"
                                     :wait-buffer="true"
-                                    :url="audio.audiourl.url"/>
+                                    :url="audio.audiourl.url"
+                                  />
                                 </el-col>
                                 <el-col :span="10" style="text-align:right;">
                                   <!-- 判断是否已经上传，如果已经上传就不显示上传按钮了 -->
@@ -278,7 +302,8 @@
                                       icon="el-icon-upload"
                                       plain
                                       circle
-                                      @click="handleUploadVoice(index, uindex, aindex)"/>
+                                      @click="handleUploadVoice(index, uindex, aindex)"
+                                    />
                                   </section>
                                   <el-button
                                     type="danger"
@@ -286,54 +311,47 @@
                                     icon="el-icon-delete"
                                     plain
                                     circle
-                                    @click="handleRMVoice(index, uindex, aindex)"/>
+                                    @click="handleRMVoice(index, uindex, aindex)"
+                                  />
                                 </el-col>
                               </el-row>
                             </el-card>
                           </section>
-
                         </section>
                       </el-form>
                     </section>
-
                   </div>
-
                 </div>
-
               </el-tab-pane>
 
               <!-- 录入会议决议 -->
               <el-tab-pane label="录入会议结论" name="third">
-                <Editor id="tinymce" v-model="tinymceHtml" :init="editorInit" aria-placeholder="请输入会议结论"/>
+                <Editor
+                  id="tinymce"
+                  v-model="tinymceHtml"
+                  :init="editorInit"
+                  aria-placeholder="请输入会议结论"
+                />
                 <div style="width:100%;margin:20px;text-align:center;">
                   <el-button type="danger" @click="saveconclusion">保存结论</el-button>
                 </div>
               </el-tab-pane>
             </el-tabs>
-
           </el-card>
-
         </el-main>
       </el-container>
     </el-container>
 
     <!-- //////////////////////用户模态框///////////////////////////// -->
-    <el-dialog
-      :visible.sync="dialogVisible"
-      title="新增议题"
-      width="40%">
+    <el-dialog :visible.sync="dialogVisible" title="新增议题" width="40%">
       <div>
-        <el-input
-          v-model="newConftitleTXT"
-          placeholder="请输入议题内容"
-          clearable/>
+        <el-input v-model="newConftitleTXT" placeholder="请输入议题内容" clearable />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleAddConfTitle">确 定</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
@@ -341,12 +359,26 @@
 import '@/external/css/bubble.css'
 import { Timeline, TimelineItem, TimelineTitie } from 'vue-cute-timeline'
 import MRecorder from '@/components/MRecorder'
+import FlagPager from '@/components/FlagPager'
 import { usrAttend, usrcancelattend } from '@/api/comm'
-import { loadConfDetail, downloadCollect, loadAttenders } from '@/api/orderconf'
-import { newSpeachItem, uploadSpeachItem, removeVoiceRecord,
-  removeSpeachItem, modifySpeachContent,
-  newcurcitlte, queryCurISSUE, saveConclusion,
-  generateVoiceUrl, modifyHolder, endRecordConf } from '@/api/recordconf.js'
+import {
+  loadConfDetail,
+  downloadCollect,
+  loadAttenders
+} from '@/api/orderconf'
+import {
+  newSpeachItem,
+  uploadSpeachItem,
+  removeVoiceRecord,
+  removeSpeachItem,
+  modifySpeachContent,
+  newcurcitlte,
+  queryCurISSUE,
+  saveConclusion,
+  generateVoiceUrl,
+  modifyHolder,
+  endRecordConf
+} from '@/api/recordconf.js'
 
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
@@ -404,7 +436,8 @@ export default {
     Timeline,
     TimelineItem,
     TimelineTitie,
-    Editor
+    Editor,
+    FlagPager
   },
   data() {
     return {
@@ -447,8 +480,10 @@ export default {
         language: 'zh_CN',
         skin_url: './static/tinymce/skins/ui/oxide',
         height: 500,
-        plugins: 'link lists image code table colorpicker textcolor wordcount contextmenu',
-        toolbar: 'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat',
+        plugins:
+          'link lists image code table colorpicker textcolor wordcount contextmenu',
+        toolbar:
+          'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat',
         branding: false
       },
 
@@ -492,6 +527,14 @@ export default {
         var _recordS = this.recordlist // 原始的列表数据
 
         console.log('待解析：', recorderList)
+
+        // 设置默认的会议议题
+        if (
+          this.confCurIssueViewsList &&
+          this.confCurIssueViewsList.length > 0
+        ) {
+          this.curtitle = this.confCurIssueViewsList[0].mainconent
+        }
 
         for (var i = 0; i < len; i++) {
           // ///////////////////////////////////// 如果为null直接跳过
@@ -552,11 +595,7 @@ export default {
             const voiceid = recorderList[i].voiceid // 编号
             const openid = recorderList[i].voiceurl // 录音的id
             if (voiceid != null) {
-              var newVoice = new Audio(
-                voiceid,
-                generateVoiceUrl(openid),
-                ''
-              )
+              var newVoice = new Audio(voiceid, generateVoiceUrl(openid), '')
               _that.recordlist[j].speachlist[k].audiolist.push(newVoice)
             }
           }
@@ -569,7 +608,16 @@ export default {
     })
   },
   methods: {
-
+    // 点击上一个议题
+    handleBefore(index) {
+      console.log(index)
+      this.curtitle = this.confCurIssueViewsList[index].mainconent
+    },
+    // 点击下一个议题
+    handleAfter(index) {
+      console.log(index)
+      this.curtitle = this.confCurIssueViewsList[index].mainconent
+    },
     // 签到
     handleAttend(index, row) {
       usrAttend({
@@ -592,7 +640,10 @@ export default {
         const link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
-        link.setAttribute('download', this.basicConfInfoView.confname + '会议采集表.docx')
+        link.setAttribute(
+          'download',
+          this.basicConfInfoView.confname + '会议采集表.docx'
+        )
         document.body.appendChild(link)
         link.click()
       })
@@ -650,12 +701,18 @@ export default {
             const len = speachlist.length
             var newspeaker = {}
             if (len > 0) {
-              const lastspeaker = speachlist[len - 1]
+              const lastspeaker = speachlist[0]
               if (lastspeaker.speakerid === that.curspeaker.workerid) {
                 that.$message.error('请继续输入发言内容')
               } else {
-                newspeaker = new Speech(row.workerid, row.usrname, '', [], null)
-                speachlist.push(newspeaker)
+                newspeaker = new Speech(
+                  row.workerid,
+                  row.usrname,
+                  '',
+                  [],
+                  null
+                )
+                speachlist.unshift(newspeaker)
               }
             } else {
               newspeaker = new Speech(row.workerid, row.usrname, '', [], null)
@@ -671,7 +728,9 @@ export default {
           this.recordlist.push(newConftitle)
           // 直接新增一个用户
           var newSpeacher = new Speech(row.workerid, row.usrname, '', [], null)
-          this.recordlist[this.recordlist.length - 1].speachlist.push(newSpeacher)
+          this.recordlist[this.recordlist.length - 1].speachlist.push(
+            newSpeacher
+          )
         }
       } else {
         this.$message.error('请先选择当前会议的议题')
@@ -686,34 +745,41 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          const confrecorid = that.recordlist[index].speachlist[uindex].speechid
-          // 如果还未曾保存用户发言记录，就直接移除页面上的元素
-          if (confrecorid == null || confrecorid === '' || confrecorid === undefined) {
-            that.recordlist[index].speachlist.splice(uindex, 1)
-            return
-          } else {
-            // 执行删除记录的操作(请求后台)
-            removeSpeachItem({
-              recorid: confrecorid
-            }).then(response => {
-              if (response.ok === true) {
-                that.recordlist[index].speachlist.splice(uindex, 1)
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-              } else {
-                that.$message.error(response.msg)
-              }
-            })
-          }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            const confrecorid =
+              that.recordlist[index].speachlist[uindex].speechid
+            // 如果还未曾保存用户发言记录，就直接移除页面上的元素
+            if (
+              confrecorid == null ||
+              confrecorid === '' ||
+              confrecorid === undefined
+            ) {
+              that.recordlist[index].speachlist.splice(uindex, 1)
+              return
+            } else {
+              // 执行删除记录的操作(请求后台)
+              removeSpeachItem({
+                recorid: confrecorid
+              }).then(response => {
+                if (response.ok === true) {
+                  that.recordlist[index].speachlist.splice(uindex, 1)
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  })
+                } else {
+                  that.$message.error(response.msg)
+                }
+              })
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } catch (e) {
         console.log(e)
       }
@@ -750,40 +816,57 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        // 录音blob文件
-        const blobvoice = that.recordlist[index].speachlist[sindex].audiolist[aindex].audiourl
-        // 会议议题的编号
-        const conftitleid = that.curtitle
-        // 会议发言记录的编号
-        const confrecid = that.recordlist[index].speachlist[sindex].speechid
-
-        // 判断当前议题
-        if (conftitleid === null || conftitleid === '' || conftitleid === undefined) {
-          that.$message.error('对不起请先选择议题!')
-          return
-        }
-        // 判断当前的发言记录是否已经保存
-        if (confrecid != null && confrecid !== '' && confrecid !== undefined) {
-          uploadSpeachItem({
-            confrecid: confrecid, // 发言编号
-            voice: blobvoice.mblob // 发言的语音文件
-          }, function(result) {
-            console.log(result)
-            if (result.ok === true) {
-              that.$message.success('上传录音成功!')
-              // 设置id
-              that.recordlist[index].speachlist[sindex].audiolist[aindex].audioid = result.data.id
-            } else {
-              that.$message.error('上传录音失败!')
-            }
-          })
-        } else {
-          that.$message.error('请先上传该条记录')
-        }
-      }).catch(() => {
-        this.$message.info('录音已经取消上传')
       })
+        .then(() => {
+          // 录音blob文件
+          const blobvoice =
+            that.recordlist[index].speachlist[sindex].audiolist[aindex]
+              .audiourl
+          // 会议议题的编号
+          const conftitleid = that.curtitle
+          // 会议发言记录的编号
+          const confrecid = that.recordlist[index].speachlist[sindex].speechid
+
+          // 判断当前议题
+          if (
+            conftitleid === null ||
+            conftitleid === '' ||
+            conftitleid === undefined
+          ) {
+            that.$message.error('对不起请先选择议题!')
+            return
+          }
+          // 判断当前的发言记录是否已经保存
+          if (
+            confrecid != null &&
+            confrecid !== '' &&
+            confrecid !== undefined
+          ) {
+            uploadSpeachItem(
+              {
+                confrecid: confrecid, // 发言编号
+                voice: blobvoice.mblob // 发言的语音文件
+              },
+              function(result) {
+                console.log(result)
+                if (result.ok === true) {
+                  that.$message.success('上传录音成功!')
+                  // 设置id
+                  that.recordlist[index].speachlist[sindex].audiolist[
+                    aindex
+                  ].audioid = result.data.id
+                } else {
+                  that.$message.error('上传录音失败!')
+                }
+              }
+            )
+          } else {
+            that.$message.error('请先上传该条记录')
+          }
+        })
+        .catch(() => {
+          this.$message.info('录音已经取消上传')
+        })
     },
 
     // 修改会议记录内容
@@ -814,32 +897,34 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        // 删除页面数据
-        audiolist.splice(aindex, 1)
-        // 删除后台
-        if (audioid !== null) {
-          console.log('准备请求后台删除,', audioid)
-          removeVoiceRecord({
-            voiceid: audioid
-          }).then(response => {
-            if (response.ok === true) {
-              this.$message.success('删除录音成功!')
-            } else {
-              this.$message.error(response.msg)
-            }
-          })
-        }
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          // 删除页面数据
+          audiolist.splice(aindex, 1)
+          // 删除后台
+          if (audioid !== null) {
+            console.log('准备请求后台删除,', audioid)
+            removeVoiceRecord({
+              voiceid: audioid
+            }).then(response => {
+              if (response.ok === true) {
+                this.$message.success('删除录音成功!')
+              } else {
+                this.$message.error(response.msg)
+              }
+            })
+          }
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
 
     // 新增议题
@@ -913,70 +998,68 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        endRecordConf(this.basicConfInfoView.confid).then(resp => {
-          if (resp.ok) {
-            this.$message.success('操作成功!')
-            this.$router.push({ path: '/dashboard' })
-          } else {
-            this.$message.error(resp.msg)
-          }
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
       })
+        .then(() => {
+          endRecordConf(this.basicConfInfoView.confid).then(resp => {
+            if (resp.ok) {
+              this.$message.success('操作成功!')
+              this.$router.push({ path: '/dashboard' })
+            } else {
+              this.$message.error(resp.msg)
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
     }
-
   }
-
 }
 </script>
 
 <style scoped>
-
 .align-center {
-    text-align: center;
+  text-align: center;
 }
 .align-left {
-    text-align: left;
+  text-align: left;
 }
 .mytable {
-    width:100%;
-    border: dotted 1px rgb(230, 232, 236);
-    border-right: none;
-    border-bottom: none;
+  width: 100%;
+  border: dotted 1px rgb(230, 232, 236);
+  border-right: none;
+  border-bottom: none;
 }
 .mytable td {
-    border: dotted 1px rgb(230, 232, 236);
-    border-top:none;
-    border-left:none;
-    line-height: 40px;
+  border: dotted 1px rgb(230, 232, 236);
+  border-top: none;
+  border-left: none;
+  line-height: 40px;
 }
-.mytable td:nth-child(2n+1) {
-    padding-left:3px;
+.mytable td:nth-child(2n + 1) {
+  padding-left: 3px;
 }
 
-.primarytable{
-    color:#E6A23C;
-    font-weight:600;
+.primarytable {
+  color: #e6a23c;
+  font-weight: 600;
 }
 
 .mywrapper_ttile {
-  border:1px solid #e4e7ed;
-  padding:20px;
-  margin-bottom:20px;
-  margin-top:20px;
+  border: 1px solid #e4e7ed;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
   position: relative;
 }
 
 .speechsection {
   /* border:1px solid #e4e7ed; */
-  padding:20px;
-  width:100%;
+  padding: 20px;
+  width: 100%;
   background: rgb(252, 252, 252);
 }
-
 </style>
