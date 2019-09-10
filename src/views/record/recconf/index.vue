@@ -180,8 +180,8 @@
                       :titles="confCurIssueViewsList"
                       titlekey="issuecurrent"
                       titlevalue="mainconent"
-                      @triggerafter = "handleAfter"
-                      @triggerbefore = "handleBefore"
+                      @triggerafter="handleAfter"
+                      @triggerbefore="handleBefore"
                     />
                     <!-- 输入议题 -->
                     <!-- <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
@@ -318,6 +318,23 @@
                             </el-card>
                           </section>
                         </section>
+
+                        <!-- 输入当前会议的结论 -->
+                        <el-row>
+                          <el-col :span="3" class="text-center">议题结论</el-col>
+                          <el-col :span="21">
+                            <el-input
+                              :rows="6"
+                              type="textarea"
+                              placeholder="请输入当前议题的结论..."/>
+                          </el-col>
+                        </el-row>
+                        <!-- 会议结论按钮 -->
+                        <el-row style="margin-top:30px;">
+                          <el-col :span="24" class="text-center">
+                            <el-button type="danger">保存议题结论</el-button>
+                          </el-col>
+                        </el-row>
                       </el-form>
                     </section>
                   </div>
@@ -1061,5 +1078,9 @@ export default {
   padding: 20px;
   width: 100%;
   background: rgb(252, 252, 252);
+}
+
+.text-center {
+  text-align:center;
 }
 </style>

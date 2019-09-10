@@ -76,7 +76,7 @@
         auto-complete="off"
         label-position="left">
 
-        <h3 class="title">智慧校园高校党政会议云记录管理系统</h3>
+        <h3 class="title">高校党政会议云记录管理平台</h3>
 
         <el-form-item prop="username">
           <span class="svg-container">
