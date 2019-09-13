@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div ref="orderconf_ref" class="container">
     <div class="header">
       <!-- 步骤条 -->
       <el-steps :active="stepnum">
@@ -55,11 +55,11 @@
             </el-row>
 
             <el-form-item label="会议名称">
-              <el-input v-model="conforderform.confname" style="width:80%;" placeholder="请输入会议名称" clearable/>
+              <el-input v-model="conforderform.confname" style="width:70%;" placeholder="请输入会议名称" clearable/>
             </el-form-item>
 
             <el-form-item label="会议类别">
-              <el-select v-model="conforderform.conflevel" style="width:80%;" placeholder="请选择会议的会议类别">
+              <el-select v-model="conforderform.conflevel" style="width:70%;" placeholder="请选择会议的会议类别">
                 <el-option
                   v-for="item in conflevels"
                   :key="item.id"
@@ -71,7 +71,7 @@
             <el-form-item label="会议属性">
               <el-select
                 v-model="conforderform.confattrs"
-                style="width:80%;"
+                style="width:70%;"
                 multiple
                 placeholder="请选择会议属性">
                 <el-option
@@ -85,7 +85,7 @@
             <!-- 开始和结束时间-->
             <el-form-item label="起止时间">
               <el-row>
-                <el-col :span="7">
+                <el-col :span="20">
                   <el-time-select
                     v-model="conforderform.starttime"
                     :picker-options="{
@@ -94,9 +94,7 @@
                       end: '18:30'
                     }"
                     placeholder="起始时间"/>
-                </el-col>
-                <el-col :span="1" style="text-align:center;">至</el-col>
-                <el-col :span="7">
+                  <span>至</span>
                   <el-time-select
                     v-model="conforderform.endtime"
                     :picker-options="{
@@ -652,6 +650,7 @@
 </template>
 
 <script>
+import Watermark from '@/external/watermark'
 import { mapGetters } from 'vuex'
 import { getallconflevel, getallconfattr, getalldep, getallDuty, getallposition, getallsemesters } from '@/api/comm'
 import { getRoomList, getRoomArange, getPeopleSelect, sureSubmitOrder, addNewRoom, loadDepUsers } from '@/api/orderconf'
@@ -812,6 +811,9 @@ export default {
     // 设置选中
     this.setUsrSelected(this.accid, 1)
     console.log('默认选择=>', this.selectedMembers)
+  },
+  mounted() {
+    Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.orderconf_ref)
   },
   destroyed: function() {
     // 清除计时器
@@ -1233,7 +1235,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 /**重写input样式 */
 .el-input__inner, .el-textarea__inner {
     border: none;
@@ -1244,6 +1246,7 @@ export default {
 .container{
   width:95%;
   margin: 0 auto;
+  height:auto;
 }
 
 .header {

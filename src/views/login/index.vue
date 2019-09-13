@@ -162,6 +162,7 @@ export default {
         callback()
       }
     }
+
     const validatepos = (rule, value, callback) => {
       if (this.registinfo.posselected.length === 0) {
         callback(new Error('请选择职位内容'))

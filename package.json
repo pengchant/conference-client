@@ -57,6 +57,7 @@
     "compression-webpack-plugin": "2.0.0",
     "copy-webpack-plugin": "4.5.2",
     "css-loader": "1.0.0",
+    "element-resize-detector": "^1.1.15",
     "eslint": "4.19.1",
     "eslint-friendly-formatter": "4.0.1",
     "eslint-loader": "2.0.0",

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:20px;">
+  <div ref="recconf_ref" style="padding:20px;">
     <el-container>
       <el-main style="padding:0px;">
         <el-card :body-style="{ padding: '20px' }" shadow="never" class="box-card">
@@ -386,6 +386,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Watermark from '@/external/watermark'
 import '@/external/css/bubble.css'
 import { Timeline, TimelineItem, TimelineTitie } from 'vue-cute-timeline'
 import MRecorder from '@/components/MRecorder'
@@ -471,6 +473,7 @@ export default {
     Editor,
     FlagPager
   },
+
   data() {
     return {
       confid: 24, // 会议的编号
@@ -526,8 +529,13 @@ export default {
       newConftitleTXT: ''
     }
   },
+  computed: {
+    ...mapGetters(['name', 'accid'])
+  },
   mounted() {
     tinymce.init({})
+    // 设置页面水印
+    Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.recconf_ref)
   },
   created() {
     var _that = this

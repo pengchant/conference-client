@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div ref="dashboard_ref" class="dashboard-container">
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card :body-style="{ padding: '0px' }" class="box-card">
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import Watermark from '@/external/watermark'
 import { mapGetters } from 'vuex'
 import { getallOrder, getallCommingOrder } from '@/api/home'
 export default {
@@ -127,6 +128,9 @@ export default {
       this.commingconf = response.data
     })
   },
+  mounted() {
+    Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.dashboard_ref)
+  },
   methods: {
     handleComingConf(index, row) {
       console.log(index, row)
@@ -145,6 +149,8 @@ export default {
 .dashboard {
   &-container {
     margin: 30px;
+    height:100%;
+    min-height: 900px;
   }
   &-text {
     font-size: 30px;

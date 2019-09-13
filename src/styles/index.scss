@@ -76,3 +76,20 @@ a:hover {
 .app-container {
   padding: 20px;
 }
+
+
+/**重写input样式 */
+.el-input__inner,
+.el-textarea__inner {
+  border: none ;
+  border-bottom: solid 1px #dcdfe6 ;
+  border-radius: 0 ;
+}
+
+/**重写success样式 */
+.el-form-item.is-success .el-input__inner,
+.el-form-item.is-success .el-input__inner:focus,
+.el-form-item.is-success .el-textarea__inner,
+.el-form-item.is-success .el-textarea__inner:focus {
+    border-color: #409EFF  ;
+}
