@@ -60,6 +60,21 @@ export const constantRouterMap = [
     ]
   },
 
+  // 直接开会
+  {
+    path: '/directstart/',
+    component: Layout,
+    name: 'directopen',
+    redirect: 'noredirect',
+    meta: {
+      title: '会议记录',
+      icon: 'zjkh'
+    },
+    children: [
+      { path: '/directstart/record', meta: { title: '直接开会' }, name: 'directrecord', component: () => import('@/views/record/directstart/index') }
+    ]
+  },
+
   // 会议记录
   {
     path: '/confrecord/',

@@ -186,3 +186,26 @@ export function unpassRecord(param) {
     data: param
   })
 }
+
+/**
+ * 更新会议结论
+ * @param {参数} param
+ */
+export function saveConfTitleConclusion(param) {
+  return request({
+    url: '/record/modifyConclusion',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ * 查询所有会议议题
+ * @param {参数} param
+ */
+export function queryConftitles(param) {
+  return request({
+    url: '/record/' + param + '/queryConftitles',
+    method: 'post'
+  })
+}

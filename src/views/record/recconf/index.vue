@@ -177,6 +177,7 @@
                 <el-row style="margin-top:10px;margin-bottom:10px;">
                   <el-col :span="16" style="text-align:center;">
                     <FlagPager
+                      :initindex = "initPagerIndex"
                       :titles="confCurIssueViewsList"
                       titlekey="issuecurrent"
                       titlevalue="mainconent"
@@ -319,22 +320,34 @@
                           </section>
                         </section>
 
-                        <!-- 输入当前会议的结论 -->
-                        <el-row>
-                          <el-col :span="3" class="text-center">议题结论</el-col>
-                          <el-col :span="21">
-                            <el-input
-                              :rows="6"
-                              type="textarea"
-                              placeholder="请输入当前议题的结论..."/>
-                          </el-col>
-                        </el-row>
-                        <!-- 会议结论按钮 -->
-                        <el-row style="margin-top:30px;">
-                          <el-col :span="24" class="text-center">
-                            <el-button type="danger">保存议题结论</el-button>
-                          </el-col>
-                        </el-row>
+                        <!-- 输入当前议题的结论 -->
+                        <section
+                          v-for="(conftitle, conftitleindex) in confTitleConclusions"
+                          :key="'curcon_' + conftitleindex"
+                        >
+                          <section v-if="conftitle.conftitlecnt == curtitle">
+                            <el-row>
+                              <el-col :span="3" class="text-center">议题结论</el-col>
+                              <el-col :span="21">
+                                <el-input
+                                  v-model="confTitleConclusions[conftitleindex].conclusion"
+                                  :rows="6"
+                                  type="textarea"
+                                  placeholder="请输入当前议题的结论"
+                                />
+                              </el-col>
+                            </el-row>
+                            <!-- 会议结论按钮 -->
+                            <el-row style="margin-top:30px;">
+                              <el-col :span="24" class="text-center">
+                                <el-button
+                                  type="danger"
+                                  @click="sageCurTitleConclusion(conftitleindex)"
+                                >保存议题结论</el-button>
+                              </el-col>
+                            </el-row>
+                          </section>
+                        </section>
                       </el-form>
                     </section>
                   </div>
@@ -342,7 +355,7 @@
               </el-tab-pane>
 
               <!-- 录入会议决议 -->
-              <el-tab-pane label="录入会议结论" name="third">
+              <!-- <el-tab-pane label="录入会议结论" name="third">
                 <Editor
                   id="tinymce"
                   v-model="tinymceHtml"
@@ -352,7 +365,7 @@
                 <div style="width:100%;margin:20px;text-align:center;">
                   <el-button type="danger" @click="saveconclusion">保存结论</el-button>
                 </div>
-              </el-tab-pane>
+              </el-tab-pane> -->
             </el-tabs>
           </el-card>
         </el-main>
@@ -394,7 +407,9 @@ import {
   saveConclusion,
   generateVoiceUrl,
   modifyHolder,
-  endRecordConf
+  endRecordConf,
+  saveConfTitleConclusion,
+  queryConftitles
 } from '@/api/recordconf.js'
 
 import tinymce from 'tinymce/tinymce'
@@ -482,6 +497,8 @@ export default {
       confCurIssueViewsList: [], // 当前待解决问题
       confLastIssueViewList: [], // 上次所提议题
       confSuggestionViewList: [], // 建议解决方案
+      confTitleConclusions: [], // 议题的内容+结论
+      initPagerIndex: 0, // 初始化FlagPager展示的index
       confattrs: [], // 会议属性
 
       // 会议记录内容列表(数据结构)
@@ -489,7 +506,7 @@ export default {
 
       // ////
       curspeaker: {}, // 当前发言人
-      curtitle: null, // 当前发言人
+      curtitle: null, // 当前会议议题
 
       tinymceHtml: '', // 会议的结论
       editorInit: {
@@ -522,6 +539,9 @@ export default {
         const data = response.data
         // 基本信息
         this.basicConfInfoView = data.basicConfInfoView
+        this.basicConfInfoView.hosterid = String(
+          this.basicConfInfoView.hosterid
+        )
         // 设置结论
         this.tinymceHtml = this.basicConfInfoView.conclusion
         // 参会人员列表
@@ -536,14 +556,14 @@ export default {
         this.confCurIssueViewsList = data.confCurIssueViewsList
         // 建议议题
         this.confSuggestionViewList = data.confSuggestionViewList
+        // 议题的结论
+        this.confTitleConclusions = data.confTitleViewList
 
         // 解析会话列表
         const recorderList = data.confRecVoicDetailViewList
         const len = recorderList.length // 待解析的列表的长度
 
         var _recordS = this.recordlist // 原始的列表数据
-
-        console.log('待解析：', recorderList)
 
         // 设置默认的会议议题
         if (
@@ -617,22 +637,32 @@ export default {
             }
           }
         }
-
-        console.log('解析完毕后：', this.recordlist)
       } else {
         this.$message.error(response.msg)
       }
     })
   },
   methods: {
+    // 点击保存用户结论
+    sageCurTitleConclusion(id) {
+      const confcon = this.confTitleConclusions[id]
+      saveConfTitleConclusion({
+        conclusion: confcon.conclusion,
+        conftitleid: confcon.id
+      }).then(resp => {
+        if (resp.ok) {
+          this.$message.success('保存结论成功')
+        } else {
+          this.$message.error(resp.msg)
+        }
+      })
+    },
     // 点击上一个议题
     handleBefore(index) {
-      console.log(index)
       this.curtitle = this.confCurIssueViewsList[index].mainconent
     },
     // 点击下一个议题
     handleAfter(index) {
-      console.log(index)
       this.curtitle = this.confCurIssueViewsList[index].mainconent
     },
     // 签到
@@ -820,6 +850,12 @@ export default {
           that.recordlist[index].speachlist[uindex].speechid = dt.id
           // 设置议题编号
           that.recordlist[index].recordid = dt.conftitleid
+
+          // 重新加载confttile
+          queryConftitles(this.confid).then(resp => {
+            this.confTitleConclusions = resp.data
+            console.log('重新加载议题后:', this.confTitleConclusions)
+          })
         } else {
           that.$message.error(response.msg)
         }
@@ -956,19 +992,22 @@ export default {
         content: content,
         conftitleid: collectid
       }).then(response => {
-        console.log(response)
         if (response.ok === true) {
           this.$message.success('录入会议议题成功!')
           // 修改会议议题下拉框
           queryCurISSUE({
             workerid: this.confid
           }).then(response => {
+            console.log('增加议题之后==========>', response)
             if (response.ok === true) {
               this.confCurIssueViewsList = response.data
+              // 设置最后一个显示c
+              this.initPagerIndex = this.confTitleConclusions.length - 1
             } else {
               this.$message.error('加载失败')
             }
           })
+
           this.newConftitleTXT = ''
           // 关闭模态框
           this.dialogVisible = false
@@ -1081,6 +1120,6 @@ export default {
 }
 
 .text-center {
-  text-align:center;
+  text-align: center;
 }
 </style>

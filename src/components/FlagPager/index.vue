@@ -25,6 +25,10 @@
 export default {
   name: 'FlagPager',
   props: {
+    initindex: {
+      default: 0,
+      type: Number
+    },
     titles: {
       // 数组内容
       default: null,
@@ -51,19 +55,18 @@ export default {
   },
   watch: {
     titles(newValue, oldValue) {
-      console.log(newValue, oldValue)
       this.init() // 重新渲染数据
     }
   },
   mounted() {
-    console.log(this.titles)
+    // console.log(this.titles)
   },
   created() {
-    console.log(this.titles)
+    // console.log(this.titles)
   },
   methods: {
     init() {
-      this.curindex = 0
+      this.curindex = this.initindex
       if (this.titles && this.titles.length > 0) {
         this.cur_title = this.filterValue(
           this.titles[this.curindex][this.titlevalue]

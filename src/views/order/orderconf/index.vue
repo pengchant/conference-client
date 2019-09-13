@@ -95,7 +95,7 @@
                     }"
                     placeholder="起始时间"/>
                 </el-col>
-                <el-col :span="1" >至</el-col>
+                <el-col :span="1" style="text-align:center;">至</el-col>
                 <el-col :span="7">
                   <el-time-select
                     v-model="conforderform.endtime"
@@ -122,7 +122,7 @@
               <!-- <el-input v-model="conforderform.leadername" style="width:40%;" placeholder="请输入会议召集人" clearable/> -->
             </el-form-item>
 
-            <el-form-item label="议题" >
+            <el-form-item label="上次议题" >
               <!-- 渲染问题列表 -->
               <section v-for="(value, index) in conforderform.lastquestions" :key="index">
                 <section v-if="index === 0">
@@ -688,7 +688,7 @@ export default {
         selectedroomid: '', // 选中会议室的编号
         selectedroom: '', // 选中的会议室
         selectAttenders: '', // 选中参会人员
-        leadername: '' // 院领导姓名
+        leadername: '' // 院领导姓名==>会议审核人员，记录审核人员
       },
 
       // 学期
@@ -802,6 +802,16 @@ export default {
 
     // 获取当前用户所在部门下的所有用户
     this.fetchDepUsers()
+
+    // 默认需要选择当前用户作为会议记录人
+    this.selectedMembers.push({
+      'selected': true,
+      'usrname': this.name,
+      'workerid': String(this.accid)
+    })
+    // 设置选中
+    this.setUsrSelected(this.accid, 1)
+    console.log('默认选择=>', this.selectedMembers)
   },
   destroyed: function() {
     // 清除计时器
@@ -1031,16 +1041,28 @@ export default {
 
     // 最终的提交
     sureSubmit() {
-      // 输出所有的表单
       // 这里需要添加下选择的人员
       const selectedm = this.selectedMembers
       this.conforderform.selectAttenders = []
       selectedm.forEach((val, index, arr) => {
         this.conforderform.selectAttenders.push(val.workerid)
       })
+
+      // 默认需要添加召集人(审核人)和记录人员(申请人)
+      var lflag = false
+      this.conforderform.selectAttenders.map((val, index, arr) => {
+        if (val === String(this.conforderform.leadername)) {
+          lflag = true
+          return
+        }
+      })
+      if (!lflag) {
+        this.conforderform.selectAttenders.push(this.conforderform.leadername)
+      }
+
       console.log('待提交的表单内容为：', this.conforderform)
 
-      // TODO:这里需要 用户的工号 和用户的姓名
+      // TODO:这里需要 账户的编号 和用户的姓名
       const usr = {
         recorderid: this.accid,
         recorder: this.name
@@ -1147,6 +1169,7 @@ export default {
       if (flag) {
         this.$message.error('已选中!')
       } else {
+        console.log(row)
         this.selectedMembers.push(row)
         // 设置选中
         this.setUsrSelected(row.workerid, 1)
@@ -1155,6 +1178,10 @@ export default {
 
     // 删除选中的人员
     rmUsrSelected(row) {
+      if (row.workerid === String(this.accid)) {
+        this.$message.error('对不起，您不能删除自己')
+        return
+      }
       this.selectedMembers.map((val, index, arr) => {
         // 删除元素
         if (row.workerid === val.workerid) {
@@ -1198,7 +1225,7 @@ export default {
         this.multipleUSRSelection = []
         this.$refs.mloadusrtb.clearSelection()
       } else {
-        this.$message.error('对不起，清先选择人员!')
+        this.$message.error('对不起，请先选择人员!')
       }
     }
 
@@ -1207,6 +1234,13 @@ export default {
 </script>
 
 <style scope>
+/**重写input样式 */
+.el-input__inner, .el-textarea__inner {
+    border: none;
+    border-bottom: solid 1px #dcdfe6;
+    border-radius: 0;
+}
+
 .container{
   width:95%;
   margin: 0 auto;

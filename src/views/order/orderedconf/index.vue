@@ -1,8 +1,9 @@
 <template>
   <div style="width:90%;margin: 0 auto;">
-    <div style="margin-top:20px;">
-      <el-row :gutter="2">
-        <el-col :span="6">
+    <div style="margin-top:20px;margin-bottom:20px;">
+      <el-row >
+        <el-col :span="4">
+          开始时间
           <el-date-picker
             v-model="conditions.search.startime"
             type="date"
@@ -11,7 +12,8 @@
             placeholder="选择申请开始日期"
           />
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
+          结束时间
           <el-date-picker
             v-model="conditions.search.entime"
             type="date"
@@ -20,7 +22,8 @@
             placeholder="选择申请结束日期"
           />
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
+          预约状态
           <el-select v-model="conditions.search.confstatus" placeholder="请选择预约状态">
             <el-option value label="所有记录">所有记录</el-option>
             <el-option value="1" label="已申请">已申请</el-option>
@@ -28,16 +31,14 @@
             <el-option value="101" label="审核不通过">审核不通过</el-option>
           </el-select>
         </el-col>
-      </el-row>
-      <el-row style="margin-top:20px;margin-bottom:20px;">
-        <el-col :span="5">
+        <el-col :span="4">
           <el-input
             v-model="conditions.search.confname"
             placeholder="请输入会议关键字"
             @keyup.enter.native="conditionsearch"
           />
         </el-col>
-        <el-col :span="19">
+        <el-col :span="8">
           <el-button style="float:right;" type="primary" @click="conditionsearch">查询</el-button>
         </el-col>
       </el-row>
