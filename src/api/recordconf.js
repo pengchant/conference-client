@@ -209,3 +209,15 @@ export function queryConftitles(param) {
     method: 'post'
   })
 }
+
+/**
+ * 直接开会录入
+ * @param {提交的参数} param
+ */
+export function directRecord(param) {
+  return request({
+    url: '/record/directrecord',
+    method: 'post',
+    data: param
+  })
+}

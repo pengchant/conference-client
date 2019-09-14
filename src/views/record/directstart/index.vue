@@ -197,6 +197,7 @@ import Watermark from '@/external/watermark'
 import { mapGetters } from 'vuex'
 import { getallconflevel, getallconfattr, getallsemesters } from '@/api/comm'
 import { loadDepUsers } from '@/api/orderconf'
+import { directRecord } from '@/api/recordconf'
 export default {
   name: 'Directstart',
   data() {
@@ -303,6 +304,7 @@ export default {
     Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.directrecordwp)
   },
   methods: {
+    // 处理查询所有用户
     fetchDepUsers() {
       loadDepUsers(this.accid).then(response => {
         this.depusers = response.data
@@ -310,15 +312,30 @@ export default {
         this.directconf.recorderid = String(this.accid) // 记录人员id
       })
     },
+    // 处理录入会议记录
     handlesubconf() {
       this.multiflag = 1
-      this.$refs['directconffm'].validate((valid) => {
-        if (valid) {
-          this.$message.success('填写完整!')
-        } else {
-          this.$message.error('请检查字段是否填写完整')
-          return false
-        }
+      this.$confirm('确定提交该会议记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$refs['directconffm'].validate((valid) => {
+          if (valid) {
+            directRecord(this.directconf).then(resp => {
+              if (resp.ok) {
+                this.$message.success('提交会议记录成功!')
+                this.$router.push('/confrecord/validating') // 查看已经提交的页面
+              } else {
+                this.$message.error(resp.msg)
+              }
+            })
+          } else {
+            this.$message.error('请检查字段是否填写完整')
+            return false
+          }
+        })
+      }).catch(() => {
       })
     }
   }
