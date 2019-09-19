@@ -40,11 +40,11 @@
           </td>
           <td>开始时间</td>
           <td>
-            {{ directconf.starttime.substr(0, 16) }}
+            {{ directconf.starttime && directconf.starttime.substr(0, 16) }}
           </td>
           <td>结束时间</td>
           <td>
-            {{ directconf.endtime.substr(0, 16) }}
+            {{ directconf.endtime && directconf.endtime.substr(0, 16) }}
           </td>
         </tr>
 

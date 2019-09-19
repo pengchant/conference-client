@@ -414,19 +414,19 @@ import {
   queryConftitles
 } from '@/api/recordconf.js'
 
-import tinymce from 'tinymce/tinymce'
-import 'tinymce/themes/silver/theme'
-import Editor from '@tinymce/tinymce-vue'
+// import tinymce from 'tinymce/tinymce'
+// import 'tinymce/themes/silver/theme'
+// import Editor from '@tinymce/tinymce-vue'
 
-import 'tinymce/plugins/image'
-import 'tinymce/plugins/link'
-import 'tinymce/plugins/code'
-import 'tinymce/plugins/table'
-import 'tinymce/plugins/lists'
-import 'tinymce/plugins/contextmenu'
-import 'tinymce/plugins/wordcount'
-import 'tinymce/plugins/colorpicker'
-import 'tinymce/plugins/textcolor'
+// import 'tinymce/plugins/image'
+// import 'tinymce/plugins/link'
+// import 'tinymce/plugins/code'
+// import 'tinymce/plugins/table'
+// import 'tinymce/plugins/lists'
+// import 'tinymce/plugins/contextmenu'
+// import 'tinymce/plugins/wordcount'
+// import 'tinymce/plugins/colorpicker'
+// import 'tinymce/plugins/textcolor'
 
 /**
  * 会议内容记录实体类
@@ -470,7 +470,7 @@ export default {
     Timeline,
     TimelineItem,
     TimelineTitie,
-    Editor,
+    // Editor,
     FlagPager
   },
 
@@ -533,7 +533,7 @@ export default {
     ...mapGetters(['name', 'accid'])
   },
   mounted() {
-    tinymce.init({})
+    // tinymce.init({})
     // 设置页面水印
     Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.recconf_ref)
   },

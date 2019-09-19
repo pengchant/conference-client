@@ -244,3 +244,17 @@ export function getDirectConfDetail(param) {
     method: 'post'
   })
 }
+
+export function passDirectConf(param) {
+  return request({
+    url: '/record/' + param + '/passconfrecord',
+    method: 'post'
+  })
+}
+
+export function unpassDirectConf(param) {
+  return request({
+    url: '/record/' + param + '/unpassconfrecord',
+    method: 'post'
+  })
+}

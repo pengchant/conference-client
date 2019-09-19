@@ -68,6 +68,18 @@ export function downloadRecord(param) {
   })
 }
 
+/**
+ * 导出直接开会的会议记录
+ * @param {参数} param
+ */
+export function downloadDirectRecord(param) {
+  return request({
+    url: '/record/' + param + '/exportDirconfrecord',
+    method: 'post',
+    responseType: 'blob'
+  })
+}
+
 export function loadAttenders(param) {
   return request({
     url: '/record/' + param + '/getAttendursts',

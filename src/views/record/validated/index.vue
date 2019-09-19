@@ -62,7 +62,7 @@
             >预约详情</el-button>
           </span>
           <span v-else>
-            <div style="width:80px;display:inline-block;"/>
+            <div style="width:80px;display:inline-block;" />
           </span>
 
           <el-button
@@ -72,19 +72,12 @@
             @click="handleRecord(scope.$index, scope.row)"
           >会议记录</el-button>
 
-          <el-button
-            size="mini"
-            plain
-            type="success"
-            @click="handlePass(scope.$index, scope.row)"
-          ><i class="el-icon-success"/>&nbsp;通过</el-button>
-          <el-button
-            size="mini"
-            plain
-            type="danger"
-            @click="handleUnpass(scope.$index, scope.row)"
-          ><i class="el-icon-error"/>&nbsp;不通过</el-button>
-
+          <el-button size="mini" plain type="success" @click="handlePass(scope.$index, scope.row)">
+            <i class="el-icon-success" />&nbsp;通过
+          </el-button>
+          <el-button size="mini" plain type="danger" @click="handleUnpass(scope.$index, scope.row)">
+            <i class="el-icon-error" />&nbsp;不通过
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -186,8 +179,12 @@
               <el-table-column width="180" align="center">
                 <template slot-scope="scope">
                   <!-- workerid, usrname, hasattend -->
-                  <span v-if="scope.row.hasattend==='1'" style="color:#67C23A;"><i class="el-icon-success"/>&nbsp;签到</span>
-                  <span v-else style="color:#F56C6C;"><i class="el-icon-error" />&nbsp;缺席</span>
+                  <span v-if="scope.row.hasattend==='1'" style="color:#67C23A;">
+                    <i class="el-icon-success" />&nbsp;签到
+                  </span>
+                  <span v-else style="color:#F56C6C;">
+                    <i class="el-icon-error" />&nbsp;缺席
+                  </span>
                 </template>
               </el-table-column>
             </el-table>
@@ -234,10 +231,7 @@
                               >{{ uspeach.speakername ||'请选择发言人' }}</span>
                             </div>
                           </el-col>
-                          <el-col :span="21">
-                            {{ uspeach.content }}
-                          </el-col>
-
+                          <el-col :span="21">{{ uspeach.content }}</el-col>
                         </el-row>
                       </el-form-item>
 
@@ -282,21 +276,20 @@
                         </el-row>
                       </section>
                     </section>
-
                   </el-form>
                 </section>
               </div>
             </div>
           </el-tab-pane>
 
-        <!-- 录入会议决议 -->
-        <!-- <el-tab-pane label="会议结论" name="third">
+          <!-- 录入会议决议 -->
+          <!-- <el-tab-pane label="会议结论" name="third">
           <div v-html="tinymceHtml"/>
-        </el-tab-pane> -->
+          </el-tab-pane>-->
         </el-tabs>
       </section>
       <section v-else>
-        <ConfDetailView :directconf = "curconfrecorddetail"/>
+        <ConfDetailView :directconf="curconfrecorddetail" />
       </section>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogRecordFormVisible = false">确 定</el-button>
@@ -311,7 +304,15 @@
 import { mapGetters } from 'vuex'
 import ConfDetailView from '@/components/ConfDetailView'
 import MRecorder from '@/components/MRecorder'
-import { getmyvaliRecord, generateVoiceUrl, passRecord, unpassRecord, getDirectConfDetail } from '../../../api/recordconf'
+import {
+  getmyvaliRecord,
+  generateVoiceUrl,
+  passRecord,
+  unpassRecord,
+  getDirectConfDetail,
+  passDirectConf,
+  unpassDirectConf
+} from '../../../api/recordconf'
 import { queryorderDetail, loadConfDetail } from '../../../api/orderconf'
 
 // import tinymce from 'tinymce/tinymce'
@@ -459,7 +460,6 @@ export default {
     fetchData() {
       getmyvaliRecord(this.conditions).then(response => {
         const data = response.data
-        console.log(data)
         this.tableData = data.list
         this.total = data.total
         this.currentPage = data.pageNum
@@ -483,6 +483,7 @@ export default {
           this.curconfrecorddetail = resp.data
         })
       } else {
+        this.directflag = 0
         // 查询会议记录
         this.queryConfDetail(row.conferenceid)
         this.dialogRecordFormVisible = true
@@ -517,28 +518,39 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info'
-      }).then(() => {
-        passRecord(row.conferenceid).then(resp => {
-          if (resp.ok) {
-            this.$message({
-              type: 'success',
-              message: '通过成功!'
+      })
+        .then(() => {
+          if (row.meetcollectid === '0') {
+            console.log('处理通过会议', row.conferenceid)
+            passDirectConf(row.conferenceid).then(resp => {
+              if (resp.ok) {
+                this.$message.success('操作成功')
+                this.fetchData()
+              } else {
+                this.$message.error(resp.msg)
+              }
             })
-            // 重新加载数据
-            this.fetchData()
           } else {
-            this.$message({
-              type: 'error',
-              message: resp.msg
+            passRecord(row.conferenceid).then(resp => {
+              if (resp.ok) {
+                this.$message({
+                  type: 'success',
+                  message: '通过成功!'
+                })
+                // 重新加载数据
+                this.fetchData()
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: resp.msg
+                })
+              }
             })
           }
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
+        .catch(() => {
+
         })
-      })
     },
 
     // 处理不通过
@@ -547,28 +559,39 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info'
-      }).then(() => {
-        unpassRecord(row.conferenceid).then(resp => {
-          if (resp.ok) {
-            this.$message({
-              type: 'success',
-              message: '审核成功!'
+      })
+        .then(() => {
+          if (row.meetcollectid === '0') {
+            console.log('处理不通过会议', row.conferenceid)
+            unpassDirectConf(row.conferenceid).then(resp => {
+              if (resp.ok) {
+                this.$message.success('操作成功')
+                this.fetchData()
+              } else {
+                this.$message.error(resp.msg)
+              }
             })
-            // 重新加载数据
-            this.fetchData()
           } else {
-            this.$message({
-              type: 'error',
-              message: resp.msg
+            unpassRecord(row.conferenceid).then(resp => {
+              if (resp.ok) {
+                this.$message({
+                  type: 'success',
+                  message: '审核成功!'
+                })
+                // 重新加载数据
+                this.fetchData()
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: resp.msg
+                })
+              }
             })
           }
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
+        .catch(() => {
+
         })
-      })
     },
 
     // 查询会议详情
