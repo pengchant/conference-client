@@ -22,7 +22,6 @@ export function getToken() {
  * @param {账户编号} accid
  */
 export function setAccid(accid) {
-  console.log('设置账户的编号:', accid)
   return Cookies.set(AccidKey, accid)
 }
 

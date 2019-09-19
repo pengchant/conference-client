@@ -127,7 +127,7 @@
                     <td colspan="2" class="align-center">{{ basicConfInfoView.confname }}会议议题采集表</td>
                   </tr>
                   <tr>
-                    <td colspan="2">一、院领导姓名：{{ confCollectBasicInfoView.collegeleader }}</td>
+                    <td colspan="2">一、会议召集人：{{ confCollectBasicInfoView.collegeleader }}</td>
                   </tr>
                   <tr>
                     <td colspan="2">二、上次会议所提议题/问题的解决情况</td>

@@ -88,7 +88,7 @@ export const constantRouterMap = [
     children: [
       { path: '/confrecord/directstart', hidden: true, meta: { title: '直接开会' }, name: 'directst', component: () => import('@/views/record/directstart') },
       { path: '/confrecord/recconf', hidden: true, meta: { title: '进行中会议' }, name: 'record', component: () => import('@/views/record/recconf') },
-      { path: '/confrecord/validating', meta: { title: '已提交会议记录' }, name: 'validating', component: () => import('@/views/record/validating') },
+      { path: '/confrecord/validating', meta: { title: '已提交待审核' }, name: 'validating', component: () => import('@/views/record/validating') },
       { path: '/confrecord/validated', meta: { title: '审核会议记录' }, name: 'validated', component: () => import('@/views/record/validated') }
     ]
   },

@@ -1,5 +1,5 @@
 <template>
-  <div style="width:90%;margin: 0 auto;">
+  <div style="width:90%;height:100%;margin: 0 auto;">
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="6">
           <el-date-picker
-            v-model="conditions.search.entime"
+            v-model="conditions.search.endtime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -51,15 +51,16 @@
       <el-table-column label="请求时间" sortable="custom" prop="colltime">
         <template slot-scope="scope">{{ formattime(scope.row.colltime) }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="230" fixed="right">
+      <el-table-column label="操作" align="center" width="230" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            plain
-            type="primary"
-            @click="handleEdit(scope.$index, scope.row)"
-          >预约详情</el-button>
-
+          <span v-if="scope.row.meetcollectid !== '0'">
+            <el-button
+              size="mini"
+              plain
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"
+            >预约详情</el-button>
+          </span>
           <el-button
             size="mini"
             plain
@@ -157,115 +158,141 @@
 
     <!-- 会议记录模态框 -->
     <el-dialog :visible.sync="dialogRecordFormVisible" width="70%" title="会议记录详情">
-      <!--//////////////////////////动态切换tab标签////////////////////////////////////////// -->
-      <el-tabs v-model="activeName" type="card">
-        <!-- 会议议题采集 -->
-        <el-tab-pane label="与会人员" name="first">
-          <el-table :data="attendersViews" :show-header="false" border style="width: 100%">
-            <el-table-column prop="usrname" />
-            <el-table-column width="180" align="center">
-              <template slot-scope="scope">
-                <!-- workerid, usrname, hasattend -->
-                <span v-if="scope.row.hasattend==='1'" style="color:#67C23A;"><i class="el-icon-success"/>&nbsp;签到</span>
-                <span v-else style="color:#F56C6C;"><i class="el-icon-error" />&nbsp;缺席</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
+      <section v-if="directflag == 0">
+        <!--//////////////////////////动态切换tab标签////////////////////////////////////////// -->
+        <el-tabs v-model="activeName" type="card">
+          <!-- 会议议题采集 -->
+          <el-tab-pane label="与会人员" name="first">
+            <el-table :data="attendersViews" :show-header="false" border style="width: 100%">
+              <el-table-column prop="usrname" />
+              <el-table-column width="180" align="center">
+                <template slot-scope="scope">
+                  <!-- workerid, usrname, hasattend -->
+                  <span v-if="scope.row.hasattend==='1'" style="color:#67C23A;">
+                    <i class="el-icon-success" />&nbsp;签到
+                  </span>
+                  <span v-else style="color:#F56C6C;">
+                    <i class="el-icon-error" />&nbsp;缺席
+                  </span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
 
-        <!-- 录入会议内容 -->
-        <el-tab-pane label="记录内容" name="second">
-          <el-row style="margin-top:10px;margin-bottom:10px;">
-            <el-col :span="3" style="text-align:center;">
-              <span style="line-height:37px;">选择会议议题</span>
-            </el-col>
-            <el-col :span="10">
-              <!-- 输入议题 -->
-              <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
-                <el-option
-                  v-for="item in confCurIssueViewsList"
-                  :key="item.issuecurrent"
-                  :label="item.mainconent"
-                  :value="item.mainconent"
-                />
-              </el-select>
-            </el-col>
-          </el-row>
+          <!-- 查看会议内容 -->
+          <el-tab-pane label="记录内容" name="second">
+            <el-row style="margin-top:10px;margin-bottom:10px;">
+              <el-col :span="3" style="text-align:center;">
+                <span style="line-height:37px;">选择查看的议题</span>
+              </el-col>
+              <el-col :span="10">
+                <!-- 选择议题 -->
+                <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
+                  <el-option
+                    v-for="item in confCurIssueViewsList"
+                    :key="item.issuecurrent"
+                    :label="item.mainconent"
+                    :value="item.mainconent"
+                  />
+                </el-select>
+              </el-col>
+            </el-row>
 
-          <!-- 会议记录功能区域 -->
-          <div class="speechsection">
-            <div v-for="(value, index) in recordlist" :key="index">
-              <!-- ///////////////////////////如果选中了某个会议议题////////////////////////////// -->
-              <section v-if="value.conftitle === curtitle">
-                <!-- 会议记录内容部分 -->
-                <el-form>
-                  <!-- //////////////////////////////加载用户会话列表/////////////////////////// -->
-                  <section v-for="(uspeach, uindex) in value.speachlist" :key="uindex">
-                    <!-- 录入会议表单区域 -->
-                    <el-form-item style="margin-top:20px;">
-                      <!-- 用户信息区域 -->
-                      <el-row>
-                        <el-col :span="3" style="text-align:center;">
-                          <div>
-                            <svg-icon icon-class="fy_usr" style="font-size:40px;" />
-                            <br >
-                            <span
-                              style="display:block;margin-top:-20px;"
-                            >{{ uspeach.speakername ||'请选择发言人' }}</span>
-                          </div>
-                        </el-col>
-                        <el-col :span="21">
-                          {{ uspeach.content }}
-                        </el-col>
-
-                      </el-row>
-                    </el-form-item>
-
-                    <!-- ////////////////////////////录音区域///////////////////////////// -->
-                    <section v-for="(audio, aindex) in uspeach.audiolist" :key="aindex">
-                      <!-- 录音播放区域 -->
-                      <el-card shadow="never">
+            <!-- 会议记录查看区域 -->
+            <div class="speechsection">
+              <div v-for="(value, index) in recordlist" :key="index">
+                <!-- ///////////////////////////如果选中了某个会议议题////////////////////////////// -->
+                <section v-if="value.conftitle === curtitle">
+                  <!-- 会议记录内容部分 -->
+                  <el-form>
+                    <!-- //////////////////////////////加载用户会话列表/////////////////////////// -->
+                    <section v-for="(uspeach, uindex) in value.speachlist" :key="uindex">
+                      <!-- 录入会议表单区域 -->
+                      <el-form-item style="margin-top:20px;">
+                        <!-- 用户信息区域 -->
                         <el-row>
-                          <el-col :span="14">
-                            <!-- 音频播放器 -->
-                            <vue-audio-native
-                              :show-current-time="true"
-                              :show-controls="false"
-                              :show-download="true"
-                              :autoplay="false"
-                              :wait-buffer="true"
-                              :url="audio.audiourl.url"
+                          <el-col :span="3" style="text-align:center;">
+                            <div>
+                              <svg-icon icon-class="fy_usr" style="font-size:40px;" />
+                              <br >
+                              <span
+                                style="display:block;margin-top:-20px;"
+                              >{{ uspeach.speakername ||'请选择发言人' }}</span>
+                            </div>
+                          </el-col>
+                          <el-col :span="21">{{ uspeach.content }}</el-col>
+                        </el-row>
+                      </el-form-item>
+
+                      <!-- ////////////////////////////录音区域///////////////////////////// -->
+                      <section v-for="(audio, aindex) in uspeach.audiolist" :key="aindex">
+                        <!-- 录音播放区域 -->
+                        <el-card shadow="never">
+                          <el-row>
+                            <el-col :span="14">
+                              <!-- 音频播放器 -->
+                              <vue-audio-native
+                                :show-current-time="true"
+                                :show-controls="false"
+                                :show-download="true"
+                                :autoplay="false"
+                                :wait-buffer="true"
+                                :url="audio.audiourl.url"
+                              />
+                            </el-col>
+                            <el-col :span="10" style="text-align:right;">
+                              <!-- 判断是否已经上传，如果已经上传就不显示上传按钮了 -->
+                              <section v-if="audio.audioid==null">
+                                <!-- 操作按钮 -->
+                                <el-button
+                                  type="success"
+                                  style="float:right;margin-right:20px;"
+                                  icon="el-icon-upload"
+                                  plain
+                                  circle
+                                  @click="handleUploadVoice(index, uindex, aindex)"
+                                />
+                              </section>
+                            </el-col>
+                          </el-row>
+                        </el-card>
+                      </section>
+                    </section>
+                    <!-- 输入当前议题的结论 -->
+                    <section
+                      v-for="(conftitle, conftitleindex) in confTitleConclusions"
+                      :key="'curcon_' + conftitleindex"
+                    >
+                      <section v-if="conftitle.conftitlecnt == curtitle">
+                        <el-row>
+                          <el-col :span="3" class="text-center">议题结论</el-col>
+                          <el-col :span="21">
+                            <el-input
+                              v-model="confTitleConclusions[conftitleindex].conclusion"
+                              :rows="6"
+                              type="textarea"
+                              placeholder="请输入当前议题的结论"
                             />
                           </el-col>
-                          <el-col :span="10" style="text-align:right;">
-                            <!-- 判断是否已经上传，如果已经上传就不显示上传按钮了 -->
-                            <section v-if="audio.audioid==null">
-                              <!-- 操作按钮 -->
-                              <el-button
-                                type="success"
-                                style="float:right;margin-right:20px;"
-                                icon="el-icon-upload"
-                                plain
-                                circle
-                                @click="handleUploadVoice(index, uindex, aindex)"
-                              />
-                            </section>
-                          </el-col>
                         </el-row>
-                      </el-card>
+                      </section>
                     </section>
-                  </section>
-                </el-form>
-              </section>
+                  </el-form>
+                </section>
+              </div>
             </div>
-          </div>
-        </el-tab-pane>
+          </el-tab-pane>
 
-        <!-- 录入会议决议 -->
-        <el-tab-pane label="会议结论" name="third">
+          <!-- 录入会议决议 -->
+          <!-- <el-tab-pane label="会议结论" name="third">
           <div v-html="tinymceHtml"/>
-        </el-tab-pane>
-      </el-tabs>
+          </el-tab-pane>-->
+        </el-tabs>
+      </section>
+      <section v-else>
+        <ConfDetailView :directconf = "curconfrecorddetail"/>
+      </section>
+
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogRecordFormVisible = false">确 定</el-button>
       </div>
@@ -276,24 +303,26 @@
 </template>
 
 <script>
+import Watermark from '@/external/watermark'
 import { mapGetters } from 'vuex'
 import MRecorder from '@/components/MRecorder'
-import { getvaliRecord, generateVoiceUrl } from '../../../api/recordconf'
+import ConfDetailView from '@/components/ConfDetailView'
+import { getvaliRecord, generateVoiceUrl, getDirectConfDetail } from '../../../api/recordconf'
 import { queryorderDetail, loadConfDetail } from '../../../api/orderconf'
 
-import tinymce from 'tinymce/tinymce'
-import 'tinymce/themes/silver/theme'
-import Editor from '@tinymce/tinymce-vue'
+// import tinymce from 'tinymce/tinymce'
+// import 'tinymce/themes/silver/theme'
+// import Editor from '@tinymce/tinymce-vue'
 
-import 'tinymce/plugins/image'
-import 'tinymce/plugins/link'
-import 'tinymce/plugins/code'
-import 'tinymce/plugins/table'
-import 'tinymce/plugins/lists'
-import 'tinymce/plugins/contextmenu'
-import 'tinymce/plugins/wordcount'
-import 'tinymce/plugins/colorpicker'
-import 'tinymce/plugins/textcolor'
+// import 'tinymce/plugins/image'
+// import 'tinymce/plugins/link'
+// import 'tinymce/plugins/code'
+// import 'tinymce/plugins/table'
+// import 'tinymce/plugins/lists'
+// import 'tinymce/plugins/contextmenu'
+// import 'tinymce/plugins/wordcount'
+// import 'tinymce/plugins/colorpicker'
+// import 'tinymce/plugins/textcolor'
 
 /**
  * 会议内容记录实体类
@@ -332,8 +361,9 @@ class Audio {
 
 export default {
   components: {
-    Editor,
-    MRecorder
+    // Editor,
+    MRecorder,
+    ConfDetailView
   },
   data() {
     return {
@@ -353,7 +383,7 @@ export default {
           confname: '',
           endtime: '',
           startime: '',
-          workerid: '9'
+          workerid: ''
         }
       },
       // 修改表单是否隐藏
@@ -390,17 +420,21 @@ export default {
       curtitle: '', // 选中的会议议题
       recordlist: [], //  会议记录内容列表(数据结构)
       confCurIssueViewsList: [], // 会议所有议题
-      confdetail: ''
+      confdetail: '',
+
+      confTitleConclusions: [], // 议题的内容+结论
+
+      // 标记是否为直接开会的会议
+      directflag: 0, // 默认不是
+      curconfrecorddetail: null // 当前会议记录的详情
     }
   },
   computed: {
-    ...mapGetters([
-      'name',
-      'accid'
-    ])
+    ...mapGetters(['name', 'accid'])
   },
   mounted() {
-    tinymce.init({})
+    // tinymce.init({})
+    Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.validating_ref)
   },
   created() {
     // 设置用户id和用户名
@@ -438,9 +472,19 @@ export default {
     },
 
     handleRecord(index, row) {
-      // 查询会议记录
-      this.queryConfDetail(row.conferenceid)
-      this.dialogRecordFormVisible = true
+      if (row.meetcollectid === '0') {
+        this.directflag = 1
+        this.dialogRecordFormVisible = true
+        // 展示直接开会的内容
+        getDirectConfDetail(row.conferenceid).then(resp => {
+          this.curconfrecorddetail = resp.data
+        })
+      } else {
+        this.directflag = 0
+        // 查询会议记录
+        this.queryConfDetail(row.conferenceid)
+        this.dialogRecordFormVisible = true
+      }
     },
 
     // 按照条件查询
@@ -482,15 +526,16 @@ export default {
           this.confattrs = data.confattrs
           // 本次议题
           this.confCurIssueViewsList = data.confCurIssueViewsList
-          console.log(this.confCurIssueViewsList)
+
+          // 议题的结论
+          this.confTitleConclusions = data.confTitleViewList
+
           this.curtitle = this.confCurIssueViewsList[0].mainconent
           // 解析会话列表
           const recorderList = data.confRecVoicDetailViewList
           const len = recorderList.length // 待解析的列表的长度
 
           var _recordS = this.recordlist // 原始的列表数据
-
-          console.log('待解析：', recorderList)
 
           for (var i = 0; i < len; i++) {
             // ///////////////////////////////////// 如果为null直接跳过
@@ -556,8 +601,6 @@ export default {
               }
             }
           }
-
-          console.log('解析完毕后：', this.recordlist)
         } else {
           this.$message.error(response.msg)
         }
@@ -568,6 +611,9 @@ export default {
 </script>
 
 <style scoped>
+.text-center {
+  text-align:center;
+}
 .mytable {
   width: 100%;
   border: dotted 1px rgb(230, 232, 236);
@@ -583,5 +629,9 @@ export default {
 
 .mytable td:nth-child(2n + 1) {
   padding-left: 3px;
+}
+
+.mytable td:nth-child(2n) {
+  padding:10px;
 }
 </style>

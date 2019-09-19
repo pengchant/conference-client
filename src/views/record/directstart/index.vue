@@ -299,7 +299,6 @@ export default {
     this.fetchDepUsers()
   },
   mounted() {
-    console.log('mounted', this.$refs.directrecordwp)
     // 设置页面水印
     Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.directrecordwp)
   },
@@ -314,6 +313,7 @@ export default {
     },
     // 处理录入会议记录
     handlesubconf() {
+      const _that = this
       this.multiflag = 1
       this.$confirm('确定提交该会议记录?', '提示', {
         confirmButtonText: '确定',
@@ -322,6 +322,9 @@ export default {
       }).then(() => {
         this.$refs['directconffm'].validate((valid) => {
           if (valid) {
+            // 首先添加会议记录人和会议审核人
+            _that.checkUsrCotain(_that.directconf.hosterid)
+            _that.checkUsrCotain(_that.directconf.recorderid)
             directRecord(this.directconf).then(resp => {
               if (resp.ok) {
                 this.$message.success('提交会议记录成功!')
@@ -337,6 +340,27 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    /**
+     * 检查参与会议人员是否选中了uid，如果没有则添加进去
+     */
+    checkUsrCotain(uid) {
+      if (uid === undefined) {
+        return
+      }
+      var flag = false
+      // 获取参会人员
+      const attenders = this.directconf.attenders
+      for (var i = 0; i < attenders.length; i++) {
+        if (uid === attenders[i]) {
+          flag = true
+          break
+        }
+      }
+      // 如果没有找到则放入数组中
+      if (!flag) {
+        this.directconf.attenders.push(uid)
+      }
     }
   }
 }

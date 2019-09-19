@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mloginwrapper">
     <!-- 对话框 -->
     <el-dialog
       :visible.sync="dialogVisible"
@@ -413,6 +413,11 @@ $light_gray:#eee;
 .vs--searchable .vs__dropdown-toggle {
     cursor: text;
     height: 100%;
+}
+
+.mloginwrapper {
+  width:100%;
+  height:100%;
 }
 
 </style>

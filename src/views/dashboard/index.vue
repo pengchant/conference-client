@@ -1,7 +1,7 @@
 <template>
   <div ref="dashboard_ref" class="dashboard-container">
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="12">
         <el-card :body-style="{ padding: '0px' }" class="box-card">
           <div slot="header" class="clearfix">
             <span style="color:#F56C6C;"><svg-icon icon-class="shalou" />&nbsp;即将开始的会议</span>
@@ -31,7 +31,7 @@
 
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="12">
         <el-card :body-style="{ padding: '0px' }" class="box-card">
           <div slot="header" class="clearfix">
             <span style="color:#409EFF;"><svg-icon icon-class="rili" />&nbsp;我的预约</span>
@@ -57,7 +57,7 @@
           </el-table>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <!-- <el-col :span="8">
         <el-card :body-style="{ padding: '0px' }" class="box-card">
           <div slot="header" class="clearfix">
             <span style="color:#67C23A;"><svg-icon icon-class="naozhong" />&nbsp;代办事项</span>
@@ -82,7 +82,7 @@
             </el-table-column>
           </el-table>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -133,7 +133,6 @@ export default {
   },
   methods: {
     handleComingConf(index, row) {
-      console.log(index, row)
       this.$router.push({
         path: '/confrecord/recconf',
         query: {

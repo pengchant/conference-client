@@ -152,6 +152,18 @@ export function getvaliRecord(param) {
 }
 
 /**
+ * 查询我的待审核的会议材料
+ * @param {参数} param
+ */
+export function getmyvaliRecord(param) {
+  return request({
+    url: '/record/getmyvaliRecord',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
  * 查询验证通过的会议材料
  * @param {参数} param
  */
@@ -219,5 +231,16 @@ export function directRecord(param) {
     url: '/record/directrecord',
     method: 'post',
     data: param
+  })
+}
+
+/**
+ * 获取直接开会的会议详情
+ * @param {参数} param
+ */
+export function getDirectConfDetail(param) {
+  return request({
+    url: '/record/' + param + '/querydirectconf',
+    method: 'post'
   })
 }
