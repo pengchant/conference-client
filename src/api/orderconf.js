@@ -100,6 +100,29 @@ export function addNewRoom(param) {
 }
 
 /**
+ * 修改会议室参数
+ * @param {会议室参数} param
+ */
+export function modifyRoom(param) {
+  return request({
+    url: '/order/modifyRoom',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ * 删除某会议室
+ * @param {会议室编号} param
+ */
+export function removeRoom(param) {
+  return request({
+    url: '/order/' + param + '/removeConfRoom',
+    method: 'post'
+  })
+}
+
+/**
  * 查询已经预约过的会议
  * @param {参数} param
  */

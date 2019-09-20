@@ -1131,7 +1131,6 @@ export default {
 
     // 新增房间
     handleNewRoom() {
-      console.log(this.newRoomForm)
       addNewRoom(this.newRoomForm).then(resp => {
         if (resp.ok) {
           console.log(resp.data)

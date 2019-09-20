@@ -15,7 +15,7 @@
         <el-col :span="4">
           结束时间
           <el-date-picker
-            v-model="conditions.search.entime"
+            v-model="conditions.search.endtime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"

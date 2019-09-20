@@ -124,7 +124,8 @@ export const constantRouterMap = [
       { path: '/sys/conflevel', meta: { title: '会议等级管理' }, name: 'conflevel', component: () => import('@/views/sysdirectory/conflevel/index') },
       { path: '/sys/confstatus', meta: { title: '会议状态管理' }, name: 'confstatus', component: () => import('@/views/sysdirectory/confstatus/index') },
       { path: '/sys/department', meta: { title: '部门管理' }, name: 'department', component: () => import('@/views/sysdirectory/department/index') },
-      { path: '/sys/position', meta: { title: '用户职务管理' }, name: 'position', component: () => import('@/views/sysdirectory/position/index') }
+      { path: '/sys/position', meta: { title: '用户职务管理' }, name: 'position', component: () => import('@/views/sysdirectory/position/index') },
+      { path: '/sys/confroom', meta: { title: '会议室管理' }, name: 'confroom', component: () => import('@/views/sysdirectory/confroom/index') }
     ]
   },
 
