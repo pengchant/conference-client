@@ -262,3 +262,43 @@ export function newPosition(params) {
   })
 }
 
+// //////////////////////////////
+
+export function getDutyList(params) {
+  return request({
+    url: '/sys/queryDutys',
+    method: 'post',
+    data: params
+  })
+}
+
+export function modifyDuty(params) {
+  return request({
+    url: '/sys/mdduty',
+    method: 'post',
+    data: params
+  })
+}
+
+export function removeDuty(id) {
+  return request({
+    url: '/sys/rmDuty/' + id,
+    method: 'post'
+  })
+}
+
+export function batchrmDutys(params) {
+  return request({
+    url: '/sys/bhrmduty/',
+    method: 'post',
+    data: params
+  })
+}
+
+export function newDuty(params) {
+  return request({
+    url: '/sys/addDuty',
+    method: 'post',
+    data: params
+  })
+}
