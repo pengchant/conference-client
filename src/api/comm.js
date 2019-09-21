@@ -54,6 +54,26 @@ export function getallsemesters() {
 }
 
 /**
+ * 查询所有职位
+ */
+export function getalldutys() {
+  return request({
+    url: '/comm/allduty',
+    method: 'post'
+  })
+}
+
+/**
+ * 查询所有角色
+ */
+export function getallRoles() {
+  return request({
+    url: '/comm/allRoles',
+    method: 'post'
+  })
+}
+
+/**
  * 用户签到
  * @param {参数} param
  */
@@ -72,6 +92,17 @@ export function usrAttend(param) {
 export function usrcancelattend(param) {
   return request({
     url: '/comm/cancelattendtag',
+    method: 'post',
+    data: param
+  })
+}
+
+/**
+ * 分页查询用户的信息
+ */
+export function queryUsrinfoView(param) {
+  return request({
+    url: '/comm/getusrinfoview',
     method: 'post',
     data: param
   })

@@ -3,7 +3,7 @@
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
-          <el-button type="warning" @click="batchremote">删除</el-button>
+          <!-- <el-button type="warning" @click="batchremote">删除</el-button> -->
           <el-button type="success" @click="addsemester">新增</el-button>
         </el-col>
         <el-col :span="18">
@@ -49,10 +49,10 @@
           <el-button
             size="mini"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
+            <!-- <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
