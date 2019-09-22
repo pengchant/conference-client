@@ -107,3 +107,15 @@ export function queryUsrinfoView(param) {
     data: param
   })
 }
+
+/**
+ * 修改用户信息
+ * @param {用户提交信息表单} param
+ */
+export function modifyUsrInfoView(param) {
+  return request({
+    url: '/comm/modifyUsrInfoView',
+    method: 'post',
+    data: param
+  })
+}

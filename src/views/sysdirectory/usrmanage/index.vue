@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import { getalldep, queryUsrinfoView, getallposition, getalldutys, getallRoles } from '@/api/comm'
+import { getalldep, queryUsrinfoView, getallposition, getalldutys, getallRoles, modifyUsrInfoView } from '@/api/comm'
 export default {
   data() {
     return {
@@ -255,6 +255,16 @@ export default {
     // 确定修改
     suremodify() {
       console.log('确定修改', this.usrinfoform)
+      modifyUsrInfoView(this.usrinfoform).then(resp => {
+        console.log(resp)
+        if (resp.ok) {
+          this.$message.success('修改成功')
+          this.fetchData()
+        } else {
+          this.$message.error(resp.msg)
+        }
+        this.dialogFormVisible = false
+      })
     },
     // 按照条件查询
     conditionsearch() {
