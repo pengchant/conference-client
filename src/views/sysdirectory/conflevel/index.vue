@@ -37,13 +37,13 @@
         width="180"/>
       <el-table-column
         prop="levelname"
-        label="会议级别名称"
+        label="会议类别名称"
         sortable = "custom"
         width="180"/>
       <el-table-column
         prop="leveldes"
         sortable = "custom"
-        label="会议级别描述"/>
+        label="会议类别描述"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button

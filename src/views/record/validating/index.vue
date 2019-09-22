@@ -46,7 +46,7 @@
     >
       <el-table-column width="90" prop="conferenceid" label="编号" sortable="custom" />
       <el-table-column prop="confname" label="会议名称" sortable="custom" />
-      <el-table-column prop="levelname" sortable="custom" label="会议级别" />
+      <el-table-column prop="levelname" sortable="custom" label="会议类别" />
       <el-table-column prop="recorder" sortable="custom" label="申请人" />
       <el-table-column label="请求时间" sortable="custom" prop="colltime">
         <template slot-scope="scope">{{ formattime(scope.row.colltime) }}</template>
@@ -97,7 +97,7 @@
             <td>{{ formattime(confdetail?confdetail.basicConfInfoView.endtime:'') }}</td>
           </tr>
           <tr>
-            <td>会议级别</td>
+            <td>会议类别</td>
             <td>{{ confdetail?confdetail.basicConfInfoView.levelname:'' }}</td>
             <td>会议属性</td>
             <td>

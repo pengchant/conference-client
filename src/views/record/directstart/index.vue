@@ -256,7 +256,7 @@ export default {
       semesters: [],
       // 会议属性
       confattrs: [],
-      // 会议级别
+      // 会议类别
       conflevels: [],
       // 当前用户所在部门的所有用户
       depusers: [],
@@ -291,7 +291,7 @@ export default {
     getallconfattr().then(response => {
       this.confattrs = response.data
     })
-    // 获取所有的会议级别
+    // 获取所有的会议类别
     getallconflevel().then(response => {
       this.conflevels = response.data
     })

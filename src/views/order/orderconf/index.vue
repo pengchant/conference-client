@@ -677,7 +677,7 @@ export default {
         semesterid: '', // 学期
         weeksno: '', // 第几周
         confname: '', // 会议名称
-        conflevel: '', // 会议级别
+        conflevel: '', // 会议类别
         confattrs: [], // 会议属性
         starttime: '', // 会议开始时间
         endtime: '', // 会议结束时间
@@ -694,7 +694,7 @@ export default {
       semesters: [],
       // 会议属性
       confattrs: [],
-      // 会议级别
+      // 会议类别
       conflevels: [],
       // 所属部门
       departments: [],
@@ -774,7 +774,7 @@ export default {
     getallconfattr().then(response => {
       this.confattrs = response.data
     })
-    // 获取所有的会议级别
+    // 获取所有的会议类别
     getallconflevel().then(response => {
       this.conflevels = response.data
     })
@@ -810,7 +810,6 @@ export default {
     })
     // 设置选中
     this.setUsrSelected(this.accid, 1)
-    console.log('默认选择=>', this.selectedMembers)
   },
   mounted() {
     Watermark.set('高校党政云记录管理平台 ' + this.name, this.$refs.orderconf_ref)

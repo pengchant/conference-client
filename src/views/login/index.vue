@@ -40,6 +40,16 @@
               :value="item.id"/>
           </el-select>
         </el-form-item>
+        <el-form-item prop="dutys" label="您的职务">
+          <el-select v-model="registinfo.dutyselected" style="width:100%;" multiple placeholder="请选择职务" >
+            <el-option
+              v-for="item in dutys"
+              :key="item.id"
+              :label="item.duty"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="设置密码" prop="password">
           <el-input v-model="registinfo.password" placeholder="请您设置密码" clearable type="password"/>
         </el-form-item>
@@ -120,7 +130,7 @@
 </template>
 
 <script>
-import { getallposition, getalldep, registinfo } from '@/api/comm'
+import { getallposition, getalldep, registinfo, getalldutys } from '@/api/comm'
 export default {
   name: 'Login',
   components: {
@@ -171,7 +181,16 @@ export default {
       }
     }
 
+     const validutys = (rule, value, callback) => {
+      if (this.registinfo.dutyselected.length === 0) {
+        callback(new Error('请选择职位内容'))
+      } else {
+        callback()
+      }
+    }
+
     return {
+      dutys: [],
       // 登录表单
       loginForm: {
         username: '',
@@ -188,6 +207,7 @@ export default {
         workerid: [{ required: true, message: '请输入您的工号', trigger: 'blur' }],
         departments: [{ required: true, validator: validatedep, trigger: 'change' }],
         positions: [{ required: true, validator: validatepos, trigger: 'change' }],
+        dutys: [{ required: true, validator: validutys, trigger: 'change' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         confirmpass: [{ required: true, validator: validatePass2, trigger: 'blur' }]
       },
@@ -202,6 +222,7 @@ export default {
         workerid: '', // 工号
         depselected: [], // 选择的部门
         posselected: [], // 选择的职位
+        dutyselected: [], // 选择的职务
         password: '', // 密码
         confirmpass: '' // 确认密码
       }, // 注册的信息
@@ -221,7 +242,10 @@ export default {
     }
   },
   created() {
-
+    // 获取职位
+    getalldutys().then(resp => {
+      this.dutys = resp.data
+    })
   },
   methods: {
     // 是否显示密码

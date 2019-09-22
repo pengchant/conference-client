@@ -108,7 +108,7 @@
             <td>{{ formattime(confdetail?confdetail.basicConfInfoView.endtime:'') }}</td>
           </tr>
           <tr>
-            <td>会议级别</td>
+            <td>会议类别</td>
             <td>{{ confdetail?confdetail.basicConfInfoView.levelname:'' }}</td>
             <td>会议属性</td>
             <td>

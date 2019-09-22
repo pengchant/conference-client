@@ -195,3 +195,14 @@ export function removeOrderConf(param) {
     method: 'post'
   })
 }
+
+/**
+ * 标记会议正在进行中
+ * @param {会议编号} param
+ */
+export function updateConfIn(param) {
+  return request({
+    url: '/order/' + param + '/flagInConference',
+    method: 'post'
+  })
+}

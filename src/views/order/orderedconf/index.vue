@@ -29,6 +29,7 @@
             <el-option value="1" label="已申请">已申请</el-option>
             <el-option value="2" label="通过申请">通过申请</el-option>
             <el-option value="101" label="审核不通过">审核不通过</el-option>
+            <el-option value="3" label="进行中">进行中</el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
@@ -53,7 +54,7 @@
     >
       <el-table-column width="80" prop="conferenceid" label="编号" sortable="custom" />
       <el-table-column prop="confname" label="会议名称" sortable="custom" />
-      <el-table-column prop="levelname" sortable="custom" label="会议级别" />
+      <el-table-column prop="levelname" sortable="custom" label="会议类别" />
       <el-table-column prop="recorder" width="90" sortable="custom" label="申请人" />
       <el-table-column label="请求时间" sortable="custom" prop="colltime">
         <template slot-scope="scope">{{ formattime(scope.row.colltime) }}</template>
@@ -61,7 +62,7 @@
       <el-table-column label="预约状态" width="150" header-align="center">
         <template slot-scope="scope">
           <!-- 如果是已经申请或者审核通过的情况 -->
-          <section v-if="scope.row.statusid == '1' || scope.row.statusid == '2' ">
+          <section v-if="scope.row.statusid == '1' || scope.row.statusid == '2' || scope.row.statusid == '3'">
             <span style="color:#67C23A;">
               <i class="el-icon-success" />
               &nbsp;{{ scope.row.confstatus }}
@@ -92,6 +93,14 @@
               type="danger"
               @click="delConf(scope.$index, scope.row)"
             >删除会议</el-button>
+          </span>
+          <span v-if="scope.row.statusid == '3'">
+            <el-button
+              size="mini"
+              plain
+              type="danger"
+              @click="startconf1(scope.$index, scope.row)"
+            >继续开会</el-button>
           </span>
           <span v-else>
             <el-button
@@ -131,7 +140,7 @@
             <td>{{ formattime(confdetail?confdetail.basicConfInfoView.endtime:'') }}</td>
           </tr>
           <tr>
-            <td>会议级别</td>
+            <td>会议类别</td>
             <td>{{ confdetail?confdetail.basicConfInfoView.levelname:'' }}</td>
             <td>会议属性</td>
             <td>
@@ -195,7 +204,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { queryOrderedConf, queryorderDetail, removeOrderConf } from '../../../api/orderconf'
+import { queryOrderedConf, queryorderDetail, removeOrderConf, updateConfIn } from '../../../api/orderconf'
 
 export default {
   data() {
@@ -217,7 +226,7 @@ export default {
           confstatus: '', // 会议的状态
           endtime: '',
           startime: '',
-          workerid: '9'
+          workerid: ''
         }
       },
       // 修改表单是否隐藏
@@ -304,9 +313,22 @@ export default {
         type: 'success'
       })
         .then(() => {
-          this.$router.push('/confrecord/recconf?confid=' + row.conferenceid)
+          // 跳转到开始开会页面
+          updateConfIn(row.conferenceid).then(resp => {
+            if (resp.ok) {
+            // 路由跳转
+              this.$router.push('/confrecord/recconf?confid=' + row.conferenceid)
+            } else {
+              this.$message.error('操作失败，请稍后重试!')
+            }
+          })
         })
         .catch(() => {})
+    },
+    // 开始开会
+    startconf1(index, row) {
+      // 路由跳转
+      this.$router.push('/confrecord/recconf?confid=' + row.conferenceid)
     },
     // 删除会议
     delConf(index, row) {

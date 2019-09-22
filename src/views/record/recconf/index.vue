@@ -27,7 +27,7 @@
               </td>
             </tr>
             <tr>
-              <td>会议级别</td>
+              <td>会议类别</td>
               <td style="min-width:140px;">校级会议</td>
               <td style="width:100px;">主持人</td>
               <td>
