@@ -21,9 +21,14 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+/**
+ * 退出
+ * @param {退出接口} param
+ */
+export function logout(accid, token) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/user/' + accid + '/logout',
+    method: 'post',
+    params: { token }
   })
 }

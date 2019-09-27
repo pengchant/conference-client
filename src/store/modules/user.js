@@ -1,4 +1,4 @@
-import { login, getInfo } from '@/api/login'
+import { login, getInfo, logout } from '@/api/login'
 import {
   getToken, setToken, removeToken,
   getAccid, setAccid, removeAccid
@@ -69,10 +69,16 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resolve()
+        logout(state.accid, getToken()).then(resp => {
+          console.log('退出登录=>', resp)
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          removeToken()
+          removeAccid() // 删除accid
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
 
@@ -81,6 +87,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeAccid()
         resolve()
       })
     }

@@ -44,7 +44,6 @@
       @selection-change="handleSelectionChange"
       @sort-change="handlerSortchange"
     >
-      <el-table-column width="90" prop="conferenceid" label="编号" sortable="custom" />
       <el-table-column prop="confname" label="会议名称" sortable="custom" />
       <el-table-column prop="levelname" sortable="custom" label="会议类别" />
       <el-table-column prop="recorder" sortable="custom" label="申请人" />
@@ -286,11 +285,6 @@
               </div>
             </div>
           </el-tab-pane>
-
-          <!-- 录入会议决议 -->
-          <!-- <el-tab-pane label="会议结论" name="third">
-          <div v-html="tinymceHtml"/>
-          </el-tab-pane>-->
         </el-tabs>
       </section>
       <section v-else>
@@ -318,20 +312,6 @@ import {
   downloadDirectRecord
 } from '../../../api/orderconf'
 import { getpassedRecord } from '../../../api/queryconf.js'
-
-// import tinymce from 'tinymce/tinymce'
-// import 'tinymce/themes/silver/theme'
-// import Editor from '@tinymce/tinymce-vue'
-
-// import 'tinymce/plugins/image'
-// import 'tinymce/plugins/link'
-// import 'tinymce/plugins/code'
-// import 'tinymce/plugins/table'
-// import 'tinymce/plugins/lists'
-// import 'tinymce/plugins/contextmenu'
-// import 'tinymce/plugins/wordcount'
-// import 'tinymce/plugins/colorpicker'
-// import 'tinymce/plugins/textcolor'
 
 /**
  * 会议内容记录实体类

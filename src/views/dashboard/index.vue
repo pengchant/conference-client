@@ -27,7 +27,7 @@
               </template>
             </el-table-column>
             <el-table-column width="100" prop="confstatus"/>
-            <el-table-column width="190" align="right">
+            <el-table-column width="190" align="center">
               <template slot-scope="scope">
                 <!-- 如果是记录员才显示开始按钮 -->
                 <span v-if="handleShow(scope.row.recorderid)">

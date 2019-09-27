@@ -184,17 +184,7 @@
                       @triggerafter="handleAfter"
                       @triggerbefore="handleBefore"
                     />
-                    <!-- 输入议题 -->
-                    <!-- <el-select v-model="curtitle" style="width:100%;" placeholder="请选择会议议题">
 
-                      <el-option
-                        v-for="item in confCurIssueViewsList"
-                        :key="item.issuecurrent"
-                        :label="item.mainconent"
-                        :value="item.mainconent"
-                      />
-
-                    </el-select>-->
                   </el-col>
                   <el-col :span="4" style="text-align:center;">
                     <el-button
@@ -354,18 +344,6 @@
                 </div>
               </el-tab-pane>
 
-              <!-- 录入会议决议 -->
-              <!-- <el-tab-pane label="录入会议结论" name="third">
-                <Editor
-                  id="tinymce"
-                  v-model="tinymceHtml"
-                  :init="editorInit"
-                  aria-placeholder="请输入会议结论"
-                />
-                <div style="width:100%;margin:20px;text-align:center;">
-                  <el-button type="danger" @click="saveconclusion">保存结论</el-button>
-                </div>
-              </el-tab-pane> -->
             </el-tabs>
           </el-card>
         </el-main>
@@ -413,20 +391,6 @@ import {
   saveConfTitleConclusion,
   queryConftitles
 } from '@/api/recordconf.js'
-
-// import tinymce from 'tinymce/tinymce'
-// import 'tinymce/themes/silver/theme'
-// import Editor from '@tinymce/tinymce-vue'
-
-// import 'tinymce/plugins/image'
-// import 'tinymce/plugins/link'
-// import 'tinymce/plugins/code'
-// import 'tinymce/plugins/table'
-// import 'tinymce/plugins/lists'
-// import 'tinymce/plugins/contextmenu'
-// import 'tinymce/plugins/wordcount'
-// import 'tinymce/plugins/colorpicker'
-// import 'tinymce/plugins/textcolor'
 
 /**
  * 会议内容记录实体类
@@ -476,7 +440,7 @@ export default {
 
   data() {
     return {
-      confid: 24, // 会议的编号
+      confid: '', // 会议的编号
       activeName: 'second', // 标签激活的name【议题采集表格】【记录会议内容】【录入会议内容】
       attendersViews: [], // 列席人员表
 
@@ -510,19 +474,6 @@ export default {
       // ////
       curspeaker: {}, // 当前发言人
       curtitle: null, // 当前会议议题
-
-      tinymceHtml: '', // 会议的结论
-      editorInit: {
-        language_url: './static/tinymce/zh_CN.js',
-        language: 'zh_CN',
-        skin_url: './static/tinymce/skins/ui/oxide',
-        height: 500,
-        plugins:
-          'link lists image code table colorpicker textcolor wordcount contextmenu',
-        toolbar:
-          'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat',
-        branding: false
-      },
 
       // ///////
       dialogVisible: false, // 是否显示模态框

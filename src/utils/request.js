@@ -2,9 +2,10 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import global_config from '@/utils/global'
 
 const service = axios.create({
-  baseURL: 'http://localhost:9999/conferencem/',
+  baseURL: global_config.BASEURL,
   timeout: 5000
 })
 

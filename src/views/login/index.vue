@@ -4,7 +4,7 @@
     <el-dialog
       :visible.sync="dialogVisible"
       :before-close="beforeCloseregist"
-      title="用户注册"
+      title="为了方便您使用本系统，请完善您的个人信息"
       width="50%"
       style="margin-top:-7vh;padding-bottom:7vh;">
       <!-- 注册开始 -->
@@ -17,10 +17,10 @@
         status-icon
       >
         <el-form-item label="您的姓名" prop="workername">
-          <el-input v-model="registinfo.workername" clearable placeholder="输入您的姓名"/>
+          <el-input v-model="registinfo.workername" disabled clearable placeholder="输入您的姓名"/>
         </el-form-item>
         <el-form-item label="您的工号" prop="workerid">
-          <el-input v-model="registinfo.workerid" clearable placeholder="输入您的工号"/>
+          <el-input v-model="registinfo.workerid" disabled clearable placeholder="输入您的工号"/>
         </el-form-item>
         <el-form-item label="所在部门" prop="departments">
           <el-select v-model="registinfo.depselected" style="width:100%" multiple placeholder="请选择部门">
@@ -50,12 +50,6 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设置密码" prop="password">
-          <el-input v-model="registinfo.password" placeholder="请您设置密码" clearable type="password"/>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="confirmpass">
-          <el-input v-model="registinfo.confirmpass" placeholder="重新输入密码" clearable type="password" />
-        </el-form-item>
         <el-form-item label="验证码" prop="validatecode">
           <slide-verify
             :l="42"
@@ -69,8 +63,8 @@
           />
         </el-form-item>
         <el-form-item style="text-align:center;">
-          <el-button type="success" @click="doregistinfo"><i class="el-icon-circle-check-outline" />创建账号</el-button>
-          <el-button type="warning" @click="backtologin"><i class="el-icon-circle-close-outline" />返回登录</el-button>
+          <el-button type="success" @click="doregistinfo"><i class="el-icon-circle-check-outline" />填写完成</el-button>
+          <!-- <el-button type="warning" @click="backtologin"><i class="el-icon-circle-close-outline" />返回登录</el-button> -->
         </el-form-item>
       </el-form>
       <!-- 注册结束 -->
@@ -78,59 +72,62 @@
 
     <!-- 登录框 -->
     <div class="login-container">
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        auto-complete="off"
-        label-position="left">
+      <div class="mlogin_form">
+        <el-form
+          ref="loginForm"
+          :model="loginForm"
+          :rules="loginRules"
+          class="login-form"
+          auto-complete="off"
+          label-position="left">
 
-        <h3 class="title">高校党政会议云记录管理平台</h3>
+          <h3 class="title">高校党政会议云记录管理平台</h3>
 
-        <el-form-item prop="username">
-          <span class="svg-container">
-            <svg-icon icon-class="user" />
-          </span>
-          <!-- 绑定登录的用户名 -->
-          <el-input
-            v-model="loginForm.username"
-            name="username"
-            type="text"
-            auto-complete="on"
-            placeholder="请输入用户名" />
-        </el-form-item>
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <!-- 绑定登录的用户名 -->
+            <el-input
+              v-model="loginForm.username"
+              name="username"
+              type="text"
+              auto-complete="on"
+              placeholder="请输入用户名" />
+          </el-form-item>
 
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <!-- 用户密码 -->
-          <el-input
-            :type="pwdType"
-            v-model="loginForm.password"
-            name="password"
-            auto-complete="on"
-            placeholder="请输入用户密码"
-            @keyup.enter.native="handleLogin" /> <!-- 监听是否按下enter，则执行登录逻辑 -->
-          <!-- 点击控制密码是可见还是不可见 -->
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-        <span style="display:inline-block;margin-bottom:20px;color:#409EFF;cursor:pointer;font-size:13px;" @click="startregist">
-          还没账号，注册一个?
-        </span>
-        <el-form-item>
-          <el-button :loading="loading" style="width:100%;" type="primary" @click.native.prevent="handleLogin">登录</el-button>
-        </el-form-item>
-      </el-form>
+          <el-form-item prop="password">
+            <span class="svg-container">
+              <svg-icon icon-class="password" />
+            </span>
+            <!-- 用户密码 -->
+            <el-input
+              :type="pwdType"
+              v-model="loginForm.password"
+              name="password"
+              auto-complete="on"
+              placeholder="请输入用户密码"
+              @keyup.enter.native="handleLogin" /> <!-- 监听是否按下enter，则执行登录逻辑 -->
+            <!-- 点击控制密码是可见还是不可见 -->
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
+          <!-- <span style="display:inline-block;margin-bottom:20px;color:#409EFF;cursor:pointer;font-size:13px;" @click="startregist">
+            还没账号，注册一个?
+          </span> -->
+          <el-form-item>
+            <el-button :loading="loading" style="width:100%;" type="primary" @click.native.prevent="handleLogin">登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getallposition, getalldep, registinfo, getalldutys } from '@/api/comm'
+import { Base64 } from 'js-base64'
+import { getallposition, getalldep, registinfo, getalldutys, searchUserHasRegistered } from '@/api/comm'
 export default {
   name: 'Login',
   components: {
@@ -153,17 +150,6 @@ export default {
       }
     }
 
-    // 验证再次输入的密码
-    const validatePass2 = (rule, value, callback) => {
-      if (value === undefined || value === '') {
-        callback(new Error('请输入确认密码'))
-      } else if (value !== this.registinfo.password) {
-        callback(new Error('两次输入的密码不一致'))
-      } else {
-        callback()
-      }
-    }
-
     // 验证选择内容
     const validatedep = (rule, value, callback) => {
       if (this.registinfo.depselected.length === 0) {
@@ -181,7 +167,7 @@ export default {
       }
     }
 
-     const validutys = (rule, value, callback) => {
+    const validutys = (rule, value, callback) => {
       if (this.registinfo.dutyselected.length === 0) {
         callback(new Error('请选择职位内容'))
       } else {
@@ -194,7 +180,7 @@ export default {
       // 登录表单
       loginForm: {
         username: '',
-        password: ''
+        password: '6666'
       },
       // 表单验证规则
       loginRules: {
@@ -207,15 +193,13 @@ export default {
         workerid: [{ required: true, message: '请输入您的工号', trigger: 'blur' }],
         departments: [{ required: true, validator: validatedep, trigger: 'change' }],
         positions: [{ required: true, validator: validatepos, trigger: 'change' }],
-        dutys: [{ required: true, validator: validutys, trigger: 'change' }],
-        password: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        confirmpass: [{ required: true, validator: validatePass2, trigger: 'blur' }]
+        dutys: [{ required: true, validator: validutys, trigger: 'change' }]
       },
       // 标记是否加载
       loading: false,
       pwdType: 'password',
       redirect: undefined, // 重定向的地址
-      dialogVisible: false, // 标记对话框是否隐藏
+      dialogVisible: true, // 标记对话框是否隐藏
 
       registinfo: {
         workername: '', // 姓名
@@ -223,13 +207,15 @@ export default {
         depselected: [], // 选择的部门
         posselected: [], // 选择的职位
         dutyselected: [], // 选择的职务
-        password: '', // 密码
-        confirmpass: '' // 确认密码
+        password: '6666', // 密码
+        confirmpass: '6666' // 确认密码
       }, // 注册的信息
 
       departments: [], // 加载的部门信息
       positions: [], // 加载的职位信息
-      validateimg: false // 验证图片是否通过
+      validateimg: false, // 验证图片是否通过
+      justinfo: '', // 传递过来的工号字符串base64解码
+      justname: '' // 传递过来的姓名base64解码
     }
   },
   watch: {
@@ -246,6 +232,44 @@ export default {
     getalldutys().then(resp => {
       this.dutys = resp.data
     })
+    // 获取职业
+    getallposition().then(response => {
+      this.positions = response.data
+    })
+    // 获取所有部门
+    getalldep().then(response => {
+      this.departments = response.data
+    })
+    const str = this.$route.query._justinfo
+    // 如果该字符串存在
+    if (str) {
+      this.justinfo = Base64.decode(str).split('|')[0]
+      this.justname = Base64.decode(str).split('|')[2]
+      this.registinfo.workerid = this.justinfo
+      this.registinfo.workername = this.justname
+      console.log(this.justname)
+      // 判断用户是否已经注册过
+      searchUserHasRegistered(this.justinfo).then(resp => {
+        if (resp.ok) {
+          if (resp.data === '0') { // 如果用户未曾注册
+          // 显示注册面板
+          } else if (resp.data === '1') { // 如果用户已经注册
+            this.loginForm.username = this.justinfo
+            this.loginForm.password = '6666'
+            // 直接执行登录操作
+            this.$store.dispatch('Login', this.loginForm).then(() => {
+              this.loading = false
+              // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
+              this.$router.push({ path: this.redirect || '/' })
+            }).catch(() => {
+              this.loading = false
+            })
+          }
+        }
+      })
+    } else {
+      this.$message.error('系统发生了异常，请重新登录进入本系统')
+    }
   },
   methods: {
     // 是否显示密码
@@ -301,13 +325,21 @@ export default {
                 this.$message.success(response.data)
                 // 清空表单
                 this.$refs['registform'].resetFields()
-                // 关闭模态框
-                this.dialogVisible = false
+                // 执行模拟登录
+                this.loginForm.username = this.justinfo
+                this.loginForm.password = '6666'
+                // 直接执行登录操作
+                this.$store.dispatch('Login', this.loginForm).then(() => {
+                  this.loading = false
+                  // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
+                  this.$router.push({ path: this.redirect || '/' })
+                }).catch(() => {
+                  this.loading = false
+                })
               } else {
                 this.registinfo.password = ''
                 this.registinfo.confirmpass = ''
               }
-              console.log(response)
             })
           } else {
             this.$message.error('图片验证失败!')
@@ -321,19 +353,8 @@ export default {
     beforeCloseregist() {
       // 清空表单
       this.$refs['registform'].resetFields()
-      // 关闭模态框
-      this.dialogVisible = false
-    },
-    startregist() {
-      this.dialogVisible = true
-      // 获取职业
-      getallposition().then(response => {
-        this.positions = response.data
-      })
-      // 获取所有部门
-      getalldep().then(response => {
-        this.departments = response.data
-      })
+      // // 关闭模态框
+      // this.dialogVisible = false
     }
   }
 }
@@ -444,4 +465,7 @@ $light_gray:#eee;
   height:100%;
 }
 
+.mlogin_form {
+  display: none;
+}
 </style>

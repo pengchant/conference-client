@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import axios from 'axios'
-
-const BASEURL = 'http://localhost:9999/conferencem/'
+import global_config from '@/utils/global'
+const BASEURL = global_config.BASEURL
 
 /**
  *  新增会议议题

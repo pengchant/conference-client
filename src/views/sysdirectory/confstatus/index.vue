@@ -31,11 +31,6 @@
         width="40"
         style="text-align:center;"/>
       <el-table-column
-        prop="id"
-        label="编号"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
         prop="confstatus"
         label="会议状态"
         sortable = "custom"
@@ -49,10 +44,6 @@
           <el-button
             size="mini"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <!-- <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>

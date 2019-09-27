@@ -3,7 +3,7 @@
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
-          <el-button type="warning" @click="batchremote">删除</el-button>
+          <el-button type="danger" @click="batchremote">批量删除</el-button>
           <el-button type="success" @click="addsemester">新增</el-button>
         </el-col>
         <el-col :span="18">
@@ -31,16 +31,6 @@
         width="40"
         style="text-align:center;"/>
       <el-table-column
-        prop="id"
-        label="编号"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
-        prop="levelname"
-        label="会议类别名称"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
         prop="leveldes"
         sortable = "custom"
         label="会议类别描述"/>
@@ -66,13 +56,13 @@
       @current-change="handlecurrentchange"/>
 
     <!-- 修改模态框 -->
-    <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改会议等级">
+    <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改会议类别">
       <el-form :model="conflevelform">
-        <el-form-item label-width="120px" label="会议等级名称">
-          <el-input v-model="conflevelform.levelname" clearable placeholder="请输入等级"/>
-        </el-form-item>
-        <el-form-item label-width="120px" label="等级描述">
-          <el-input v-model="conflevelform.leveldes" clearable placeholder="请输入会议等级描述"/>
+        <!-- <el-form-item label-width="120px" label="会议类别名称">
+          <el-input v-model="conflevelform.levelname" clearable placeholder="请输入类别"/>
+        </el-form-item> -->
+        <el-form-item label-width="120px" label="会议类别">
+          <el-input v-model="conflevelform.leveldes" clearable placeholder="请输入会议类别描述"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,13 +72,13 @@
     </el-dialog>
 
     <!-- 新增模态框 -->
-    <el-dialog :visible.sync="newFormVisible" width="50%" title="新增会议等级">
+    <el-dialog :visible.sync="newFormVisible" width="50%" title="新增会议类别">
       <el-form :model="conflevelform">
-        <el-form-item label-width="120px" label="会议等级">
-          <el-input v-model="conflevelform.levelname" clearable placeholder="请输入等级"/>
-        </el-form-item>
-        <el-form-item label-width="120px" label="等级描述">
-          <el-input v-model="conflevelform.leveldes" clearable placeholder="请输入会议等级描述"/>
+        <!-- <el-form-item label-width="120px" label="会议类别">
+          <el-input v-model="conflevelform.levelname" clearable placeholder="请输入类别"/>
+        </el-form-item> -->
+        <el-form-item label-width="120px" label="会议类别">
+          <el-input v-model="conflevelform.leveldes" clearable placeholder="请输入会议类别描述"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

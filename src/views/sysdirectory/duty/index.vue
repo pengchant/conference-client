@@ -3,7 +3,7 @@
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
-          <el-button type="warning" @click="batchremote">删除</el-button>
+          <el-button type="danger" @click="batchremote">批量删除</el-button>
           <el-button type="success" @click="addsemester">新增</el-button>
         </el-col>
         <el-col :span="18">
@@ -30,16 +30,6 @@
         type="selection"
         width="40"
         style="text-align:center;"/>
-      <el-table-column
-        prop="id"
-        label="编号"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
-        prop="dutynum"
-        label="职位代码"
-        sortable = "custom"
-        width="180"/>
       <el-table-column
         prop="duty"
         sortable = "custom"
@@ -68,9 +58,6 @@
     <!-- 修改模态框 -->
     <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改职位">
       <el-form :model="positionform">
-        <el-form-item label-width="120px" label="职位编号">
-          <el-input v-model="positionform.dutynum" clearable placeholder="请输入职位编号"/>
-        </el-form-item>
         <el-form-item label-width="120px" label="职位名称">
           <el-input v-model="positionform.duty" clearable placeholder="请输入职位名称"/>
         </el-form-item>
@@ -84,9 +71,6 @@
     <!-- 新增模态框 -->
     <el-dialog :visible.sync="newFormVisible" width="50%" title="新增学期">
       <el-form :model="positionform">
-        <el-form-item label-width="120px" label="职位编号">
-          <el-input v-model="positionform.dutynum" clearable placeholder="请输入职位编号"/>
-        </el-form-item>
         <el-form-item label-width="120px" label="职位名称">
           <el-input v-model="positionform.duty" clearable placeholder="请输入职位名称"/>
         </el-form-item>

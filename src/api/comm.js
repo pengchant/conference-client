@@ -119,3 +119,14 @@ export function modifyUsrInfoView(param) {
     data: param
   })
 }
+
+/**
+ * 查询该工号的用户是否已经注册过
+ * @param {用户工号} param
+ */
+export function searchUserHasRegistered(param) {
+  return request({
+    url: '/comm/' + param + '/adapterHasRegisted',
+    method: 'post'
+  })
+}

@@ -52,7 +52,6 @@
       @selection-change="handleSelectionChange"
       @sort-change="handlerSortchange"
     >
-      <el-table-column width="80" prop="conferenceid" label="编号" sortable="custom" />
       <el-table-column prop="confname" label="会议名称" sortable="custom" />
       <el-table-column prop="levelname" sortable="custom" label="会议类别" />
       <el-table-column prop="recorder" width="90" sortable="custom" label="申请人" />

@@ -3,7 +3,7 @@
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
-          <el-button type="warning" @click="batchremote">删除</el-button>
+          <el-button type="danger" @click="batchremote">批量删除</el-button>
           <el-button type="success" @click="addsemester">新增</el-button>
         </el-col>
         <el-col :span="18">
@@ -30,16 +30,6 @@
         type="selection"
         width="40"
         style="text-align:center;"/>
-      <el-table-column
-        prop="id"
-        label="编号"
-        sortable = "custom"
-        width="180"/>
-      <el-table-column
-        prop="semesterid"
-        label="学期代码"
-        sortable = "custom"
-        width="180"/>
       <el-table-column
         prop="semestername"
         sortable = "custom"
@@ -68,9 +58,6 @@
     <!-- 修改模态框 -->
     <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改学期">
       <el-form :model="semesterform">
-        <el-form-item label-width="120px" label="学期编号">
-          <el-input v-model="semesterform.semesterid" clearable placeholder="请输入学期编号"/>
-        </el-form-item>
         <el-form-item label-width="120px" label="学期名称">
           <el-input v-model="semesterform.semestername" clearable placeholder="请输入学期名称"/>
         </el-form-item>
@@ -84,9 +71,6 @@
     <!-- 新增模态框 -->
     <el-dialog :visible.sync="newFormVisible" width="50%" title="新增学期">
       <el-form :model="semesterform">
-        <el-form-item label-width="120px" label="学期编号">
-          <el-input v-model="semesterform.semesterid" clearable placeholder="请输入学期编号"/>
-        </el-form-item>
         <el-form-item label-width="120px" label="学期名称">
           <el-input v-model="semesterform.semestername" clearable placeholder="请输入学期名称"/>
         </el-form-item>
