@@ -38,6 +38,7 @@
     "vue-count-to": "^1.0.13",
     "vue-cute-timeline": "^1.2.8",
     "vue-howler": "^0.7.0",
+    "vue-i18n": "^8.15.0",
     "vue-monoplasty-slide-verify": "^1.0.5",
     "vue-router": "3.0.1",
     "vuetify-audio": "0.0.8",

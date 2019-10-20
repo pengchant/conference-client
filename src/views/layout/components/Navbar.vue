@@ -41,8 +41,9 @@ export default {
     ])
   },
   created: function() {
-    // 加载用户信息
-    this.$store.dispatch('GetInfo')
+    if (this.name === '' || this.name === undefined) {
+      this.$store.dispatch('GetInfo')
+    }
   },
   methods: {
     toggleSideBar() {

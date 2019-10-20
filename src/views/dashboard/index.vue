@@ -163,10 +163,11 @@
 </template>
 
 <script>
-import Watermark from '@/external/watermark'
 import { mapGetters } from 'vuex'
+import Watermark from '@/external/watermark'
 import { getallOrder, getallCommingOrder } from '@/api/home'
 import { queryorderDetail, updateConfIn } from '@/api/orderconf'
+import { getAccid } from '@/utils/auth'
 export default {
   name: 'Dashboard',
   data() {
@@ -179,15 +180,24 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name', 'roles', 'accid'])
+    ...mapGetters([
+      'name',
+      'roles',
+      'accid'
+    ])
   },
   created() {
+    var cur = this.accid
+    // 如果cur为undefined，则从cookie中读取值
+    if (cur === undefined) {
+      cur = getAccid()
+    }
     // 获取我的所有的会议预约
-    getallOrder(this.accid).then(response => {
+    getallOrder(cur).then(response => {
       this.myorderdata = response.data
     })
     // 获取即将开始的会议
-    getallCommingOrder(this.accid).then(response => {
+    getallCommingOrder(cur).then(response => {
       this.commingconf = response.data
     })
   },

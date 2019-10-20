@@ -23,23 +23,35 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   // 主页
   {
-    path: '/',
+    path: '',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: false,
-    meta: {
-      title: '首页',
-      icon: 'home'
-    },
+    redirect: 'dashboard',
     children: [{
       path: 'dashboard', // 嵌套路由dashboard会被渲染在Layout 的<route-view/>中
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/dashboard/index'),
+      name: 'Dashboard',
+      meta: {
+        title: '首页',
+        icon: 'home',
+        noCache: true,
+        affix: true
+      }
     }]
   },
 
@@ -47,7 +59,6 @@ export const constantRouterMap = [
   {
     path: '/order/',
     component: Layout,
-    name: 'conforder',
     redirect: 'noredirect', // 点击该路由不跳转
     meta: {
       title: '会议预约',
@@ -64,7 +75,6 @@ export const constantRouterMap = [
   {
     path: '/directstart/',
     component: Layout,
-    name: 'directopen',
     redirect: 'noredirect',
     meta: {
       title: '会议记录',
@@ -79,7 +89,6 @@ export const constantRouterMap = [
   {
     path: '/confrecord/',
     component: Layout,
-    name: 'confrecord',
     redirect: 'noredirect', // 点击该路由不跳转
     meta: {
       title: '会议记录',
@@ -97,7 +106,6 @@ export const constantRouterMap = [
   {
     path: '/confquery/',
     component: Layout,
-    name: 'confquery',
     redirect: 'noredirect', // 点击该路由不跳转
     meta: {
       title: '归档记录查询',
@@ -112,7 +120,6 @@ export const constantRouterMap = [
   {
     path: '/sys/',
     component: Layout,
-    name: 'system',
     redirect: 'noredirect', // 点击该路由不跳转
     meta: {
       title: '系统配置',

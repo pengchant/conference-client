@@ -72,6 +72,9 @@
 
     <!-- 登录框 -->
     <div class="login-container">
+      <div class="login-form">
+        <h3 class="title">高校党政会议云记录管理平台,加载中...</h3>
+      </div>
       <div class="mlogin_form">
         <el-form
           ref="loginForm"
@@ -81,7 +84,7 @@
           auto-complete="off"
           label-position="left">
 
-          <h3 class="title">高校党政会议云记录管理平台</h3>
+          <!-- <h3 class="title">高校党政会议云记录管理平台</h3> -->
 
           <el-form-item prop="username">
             <span class="svg-container">
@@ -199,7 +202,7 @@ export default {
       loading: false,
       pwdType: 'password',
       redirect: undefined, // 重定向的地址
-      dialogVisible: true, // 标记对话框是否隐藏
+      dialogVisible: false, // 标记对话框是否隐藏
 
       registinfo: {
         workername: '', // 姓名
@@ -252,6 +255,7 @@ export default {
       searchUserHasRegistered(this.justinfo).then(resp => {
         if (resp.ok) {
           if (resp.data === '0') { // 如果用户未曾注册
+            this.dialogVisible = true
           // 显示注册面板
           } else if (resp.data === '1') { // 如果用户已经注册
             this.loginForm.username = this.justinfo
@@ -259,8 +263,11 @@ export default {
             // 直接执行登录操作
             this.$store.dispatch('Login', this.loginForm).then(() => {
               this.loading = false
-              // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
-              this.$router.push({ path: this.redirect || '/' })
+              // 记录用户的信息
+              this.$store.dispatch('GetInfo').then(() => {
+                // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
+                this.$router.push({ path: this.redirect || '/' })
+              })
             }).catch(() => {
               this.loading = false
             })
@@ -331,8 +338,11 @@ export default {
                 // 直接执行登录操作
                 this.$store.dispatch('Login', this.loginForm).then(() => {
                   this.loading = false
-                  // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
-                  this.$router.push({ path: this.redirect || '/' })
+                  // 记录用户的信息
+                  this.$store.dispatch('GetInfo').then(() => {
+                    // 如果有就跳转到原先的页面，如果没有就直接跳转到首页
+                    this.$router.push({ path: this.redirect || '/' })
+                  })
                 }).catch(() => {
                   this.loading = false
                 })
@@ -466,6 +476,6 @@ $light_gray:#eee;
 }
 
 .mlogin_form {
-  display: none;
+  display: block;
 }
 </style>
