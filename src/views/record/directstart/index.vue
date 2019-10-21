@@ -199,7 +199,7 @@ import { getallconflevel, getallconfattr, getallsemesters } from '@/api/comm'
 import { loadDepUsers } from '@/api/orderconf'
 import { directRecord } from '@/api/recordconf'
 export default {
-  name: 'Directstart',
+  name: 'Directrecord',
   data() {
     const semestervalidator = (rule, value, callback) => {
       if (this.directconf.semester === '') {

@@ -349,6 +349,7 @@ class Audio {
 }
 
 export default {
+  name: 'Material',
   components: {
     // Editor,
     MRecorder,

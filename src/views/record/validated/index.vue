@@ -346,6 +346,7 @@ class Audio {
 }
 
 export default {
+  name: 'Validated',
   components: {
     // Editor,
     MRecorder,

@@ -359,6 +359,7 @@ class Audio {
 }
 
 export default {
+  name: 'Validating',
   components: {
     // Editor,
     MRecorder,

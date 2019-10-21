@@ -206,6 +206,7 @@ import { mapGetters } from 'vuex'
 import { queryOrderedConf, queryorderDetail, removeOrderConf, updateConfIn } from '../../../api/orderconf'
 
 export default {
+  name: 'Orderedconf',
   data() {
     return {
       currentPage: 1, // 当前页面

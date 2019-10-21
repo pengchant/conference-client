@@ -156,6 +156,7 @@ import { mapGetters } from 'vuex'
 import { passOrderConf, unpassOrderConf, queryorderDetail, queryValitingConf } from '@/api/orderconf'
 
 export default {
+  name: 'Validateorder',
   data() {
     return {
       currentPage: 1, // 当前页面

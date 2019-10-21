@@ -144,6 +144,7 @@
 <script>
 import { getalldep, queryUsrinfoView, getallposition, getalldutys, getallRoles, modifyUsrInfoView } from '@/api/comm'
 export default {
+  name: 'Usrmanage',
   data() {
     return {
       currentPage: 1, // 当前页面

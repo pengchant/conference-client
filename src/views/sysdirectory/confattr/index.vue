@@ -93,6 +93,7 @@
 <script>
 import { getConfattrList, modifyConfattr, removeConfattr, batchrmConfattr, newConfattr } from '../../../api/sysdirectory'
 export default {
+  name: 'Confattr',
   data() {
     return {
       currentPage: 1, // 当前页面

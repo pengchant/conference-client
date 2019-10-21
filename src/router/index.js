@@ -49,7 +49,6 @@ export const constantRouterMap = [
       meta: {
         title: '首页',
         icon: 'home',
-        noCache: true,
         affix: true
       }
     }]
@@ -65,9 +64,9 @@ export const constantRouterMap = [
       icon: 'order'
     },
     children: [
-      { path: '/order/orderconf', meta: { title: '预约会议' }, name: 'orderconf', component: () => import('@/views/order/orderconf/index') },
-      { path: '/order/orderedconf', meta: { title: '已预约会议' }, name: 'orderedconf', component: () => import('@/views/order/orderedconf/index') },
-      { path: '/order/validateorder', meta: { title: '审核预约会议' }, name: 'validateorder', component: () => import('@/views/order/validateorder/index') }
+      { path: '/order/orderconf', meta: { title: '预约会议' }, name: 'Orderconf', component: () => import('@/views/order/orderconf/index') },
+      { path: '/order/orderedconf', meta: { title: '已预约会议' }, name: 'Orderedconf', component: () => import('@/views/order/orderedconf/index') },
+      { path: '/order/validateorder', meta: { title: '审核预约会议' }, name: 'Validateorder', component: () => import('@/views/order/validateorder/index') }
     ]
   },
 
@@ -81,7 +80,7 @@ export const constantRouterMap = [
       icon: 'zjkh'
     },
     children: [
-      { path: '/directstart/record', meta: { title: '直接开会' }, name: 'directrecord', component: () => import('@/views/record/directstart/index') }
+      { path: '/directstart/record', meta: { title: '直接开会' }, name: 'Directrecord', component: () => import('@/views/record/directstart/index') }
     ]
   },
 
@@ -97,8 +96,8 @@ export const constantRouterMap = [
     children: [
       { path: '/confrecord/directstart', hidden: true, meta: { title: '直接开会' }, name: 'directst', component: () => import('@/views/record/directstart') },
       { path: '/confrecord/recconf', hidden: true, meta: { title: '进行中会议' }, name: 'record', component: () => import('@/views/record/recconf') },
-      { path: '/confrecord/validating', meta: { title: '已提交待审核' }, name: 'validating', component: () => import('@/views/record/validating') },
-      { path: '/confrecord/validated', meta: { title: '审核会议记录' }, name: 'validated', component: () => import('@/views/record/validated') }
+      { path: '/confrecord/validating', meta: { title: '已提交待审核' }, name: 'Validating', component: () => import('@/views/record/validating') },
+      { path: '/confrecord/validated', meta: { title: '审核会议记录' }, name: 'Validated', component: () => import('@/views/record/validated') }
     ]
   },
 
@@ -112,7 +111,7 @@ export const constantRouterMap = [
       icon: 'confquery'
     },
     children: [
-      { path: '/confquery/material', meta: { title: '归档记录查询' }, name: 'material', component: () => import('@/views/query/confquery/index') }
+      { path: '/confquery/material', meta: { title: '归档记录查询' }, name: 'Material', component: () => import('@/views/query/confquery/index') }
     ]
   },
 
@@ -126,15 +125,15 @@ export const constantRouterMap = [
       icon: 'confconfig'
     },
     children: [
-      { path: '/sys/semester', meta: { title: '学期配置' }, name: 'semester', component: () => import('@/views/sysdirectory/semester/index') },
-      { path: '/sys/confattr', meta: { title: '会议属性配置' }, name: 'confattr', component: () => import('@/views/sysdirectory/confattr/index') },
-      { path: '/sys/conflevel', meta: { title: '会议类别配置' }, name: 'conflevel', component: () => import('@/views/sysdirectory/conflevel/index') },
-      { path: '/sys/confstatus', meta: { title: '会议状态配置' }, name: 'confstatus', component: () => import('@/views/sysdirectory/confstatus/index') },
-      { path: '/sys/department', meta: { title: '部门配置' }, name: 'department', component: () => import('@/views/sysdirectory/department/index') },
-      { path: '/sys/position', meta: { title: '用户职务配置' }, name: 'position', component: () => import('@/views/sysdirectory/position/index') },
-      { path: '/sys/duty', meta: { title: '用户职位配置' }, name: 'duty', component: () => import('@/views/sysdirectory/duty/index') },
-      { path: '/sys/confroom', meta: { title: '会议室管理' }, name: 'confroom', component: () => import('@/views/sysdirectory/confroom/index') },
-      { path: '/sys/usrmanage', meta: { title: '用户管理' }, name: 'usrmanage', component: () => import('@/views/sysdirectory/usrmanage/index') }
+      { path: '/sys/semester', meta: { title: '学期配置' }, name: 'Semester', component: () => import('@/views/sysdirectory/semester/index') },
+      { path: '/sys/confattr', meta: { title: '会议属性配置' }, name: 'Confattr', component: () => import('@/views/sysdirectory/confattr/index') },
+      { path: '/sys/conflevel', meta: { title: '会议类别配置' }, name: 'Conflevel', component: () => import('@/views/sysdirectory/conflevel/index') },
+      { path: '/sys/confstatus', meta: { title: '会议状态配置' }, name: 'Confstatus', component: () => import('@/views/sysdirectory/confstatus/index') },
+      { path: '/sys/department', meta: { title: '部门配置' }, name: 'Department', component: () => import('@/views/sysdirectory/department/index') },
+      { path: '/sys/position', meta: { title: '用户职务配置' }, name: 'Position', component: () => import('@/views/sysdirectory/position/index') },
+      { path: '/sys/duty', meta: { title: '用户职位配置' }, name: 'Duty', component: () => import('@/views/sysdirectory/duty/index') },
+      { path: '/sys/confroom', meta: { title: '会议室管理' }, name: 'Confroom', component: () => import('@/views/sysdirectory/confroom/index') },
+      { path: '/sys/usrmanage', meta: { title: '用户管理' }, name: 'Usrmanage', component: () => import('@/views/sysdirectory/usrmanage/index') }
     ]
   },
 

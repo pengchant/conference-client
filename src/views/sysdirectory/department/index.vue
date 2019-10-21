@@ -87,6 +87,7 @@
 <script>
 import { getDepartmentList, modifyDepartment, removeDepartment, batchrmDepartments, newDepartments } from '../../../api/sysdirectory'
 export default {
+  name: 'Department',
   data() {
     return {
       currentPage: 1, // 当前页面

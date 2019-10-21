@@ -87,6 +87,7 @@
 <script>
 import { getPositionList, modifyPosition, removePosition, batchrmPositions, newPosition } from '../../../api/sysdirectory'
 export default {
+  name: 'Position',
   data() {
     return {
       currentPage: 1, // 当前页面

@@ -93,6 +93,7 @@
 <script>
 import { getConflevelList, modifyConflevel, removeConflevel, batchrmConflevel, newConfalevel } from '../../../api/sysdirectory'
 export default {
+  name: 'Conflevel',
   data() {
     return {
       currentPage: 1, // 当前页面

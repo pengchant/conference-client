@@ -87,6 +87,7 @@
 <script>
 import { getList, modifySemester, removeSemester, batchrmSemester, newSemester } from '../../../api/sysdirectory'
 export default {
+  name: 'Semester',
   data() {
     return {
       currentPage: 1, // 当前页面

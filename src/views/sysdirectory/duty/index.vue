@@ -87,6 +87,7 @@
 <script>
 import { getDutyList, modifyDuty, removeDuty, batchrmDutys, newDuty } from '../../../api/sysdirectory'
 export default {
+  name: 'Duty',
   data() {
     return {
       currentPage: 1, // 当前页面

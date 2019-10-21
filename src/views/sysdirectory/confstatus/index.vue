@@ -97,6 +97,7 @@
 <script>
 import { getConfstsList, modifyConfsts, removeConfsts, batchrmConfsts, newConfsts } from '../../../api/sysdirectory'
 export default {
+  name: 'Confstatus',
   data() {
     return {
       currentPage: 1, // 当前页面

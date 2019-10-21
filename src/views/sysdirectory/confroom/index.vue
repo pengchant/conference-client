@@ -240,6 +240,7 @@ const hdcondtions = ['空调', '投影仪', '麦克风', '音响', '演讲台', 
 import { getalldep } from '@/api/comm'
 import { getRoomList, addNewRoom, modifyRoom, removeRoom } from '@/api/orderconf'
 export default {
+  name: 'Confroom',
   data() {
     return {
       checkAll: false,
