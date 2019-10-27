@@ -302,3 +302,36 @@ export function newDuty(params) {
     data: params
   })
 }
+
+/**
+ *
+ * @param {分页查询二级部门} param
+ */
+export function queryPagedSecondDep(param) {
+  return request({
+    url: '/sys/queryAllSecondDep',
+    method: 'post',
+    data: param
+  })
+}
+export function modifyDepSec(params) {
+  return request({
+    url: '/sys/updateChildDep',
+    method: 'post',
+    data: params
+  })
+}
+export function removeSecDep(id) {
+  return request({
+    url: '/sys/' + id + '/removeChildDep',
+    method: 'post'
+  })
+}
+
+export function addDepSec(params) {
+  return request({
+    url: '/sys/addsecdep',
+    method: 'post',
+    data: params
+  })
+}
