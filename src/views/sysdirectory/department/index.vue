@@ -120,6 +120,9 @@
               size="mini"
               type="danger"
               @click="shandleDelete(scope.$index, scope.row)"><i class="el-icon-delete "/>删除</el-button>
+            <el-button
+              size="mini"
+              @click="allocatePeople(scope.$index, scope.row)"><i class="el-icon-s-custom"/>分配人员</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -435,6 +438,11 @@ export default {
           this.$message.error(resp.msg)
         }
       })
+    },
+
+    // 开始分配人员
+    allocatePeople(index, row) {
+
     }
 
   }

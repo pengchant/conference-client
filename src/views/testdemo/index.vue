@@ -7,6 +7,9 @@
       </el-aside>
       <el-main class="main">
         <PeopleSelector @afterSelect="handlerAfter"/>
+        <br>
+        <br>
+        <DepSelector pdepname="计算机科学与工程学院-大数据小组" pdepid="1" @afterSelect="handlerAfter"/>
       </el-main>
     </el-container>
   </div>
@@ -14,10 +17,12 @@
 
 <script>
 import PeopleSelector from '@/components/PeopleSelector'
+import DepSelector from '@/components/DepSelector'
 export default {
   name: 'TestDemo',
   components: {
-    PeopleSelector
+    PeopleSelector,
+    DepSelector
   },
   data() {
     return {
