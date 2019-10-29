@@ -120,9 +120,7 @@
               size="mini"
               type="danger"
               @click="shandleDelete(scope.$index, scope.row)"><i class="el-icon-delete "/>删除</el-button>
-            <el-button
-              size="mini"
-              @click="allocatePeople(scope.$index, scope.row)"><i class="el-icon-s-custom"/>分配人员</el-button>
+            <DepSelector :pdepname="secondHandlerDep" :pdepid="s_conditions.search.depid + ''" />
           </template>
         </el-table-column>
       </el-table>
@@ -167,12 +165,16 @@
 </template>
 
 <script>
+import DepSelector from '@/components/DepSelector'
 import { getDepartmentList, modifyDepartment,
   removeDepartment, batchrmDepartments,
   newDepartments, queryPagedSecondDep,
   modifyDepSec, removeSecDep, addDepSec } from '../../../api/sysdirectory'
 export default {
   name: 'Department',
+  components: {
+    DepSelector
+  },
   data() {
     return {
       currentPage: 1, // 当前页面
@@ -387,7 +389,6 @@ export default {
     // 删除
     shandleDelete(index, row) {
       const rowid = row.id
-      console.log(rowid)
       this.$confirm('你确定要删除' + row.depname + '吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

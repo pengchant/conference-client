@@ -335,3 +335,38 @@ export function addDepSec(params) {
     data: params
   })
 }
+
+/**
+ * 查询二级部门下的所有用户
+ * @param {二级部门编号} params
+ */
+export function queryUsecDep(params) {
+  return request({
+    url: '/sys/' + params + '/queryUsecDep',
+    method: 'post'
+  })
+}
+
+/**
+ * 添加二级用户关系
+ * @param {*} params
+ */
+export function addUsrsecDep(params) {
+  return request({
+    url: '/sys/addUsrsecDep',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ *  删除用户二级部门关系
+ * @param {*} params
+ */
+export function removeUsrSecDep(params) {
+  return request({
+    url: '/sys/' + params + '/removeUsrSecDep',
+    method: 'post'
+  })
+}
+
