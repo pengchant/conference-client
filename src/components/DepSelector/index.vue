@@ -1,7 +1,12 @@
 <template>
-  <span>
+  <div style="display:inline-block;margin-left:12px;">
     <el-button type="primary" icon="el-icon-edit" size="mini" @click="openDepSec">选择用户</el-button>
-    <el-dialog :visible.sync="depDialogvisable" :title="pdepname" width="80%" top="2vh">
+    <el-dialog
+      :visible.sync="depDialogvisable"
+      :title="secdepname"
+      :modal="false"
+      width="80%"
+      top="2vh">
       <div style="min-height: 500px; position:reltive">
         <el-row :gutter="30" style="min-height:480px;">
           <el-col :span="14">
@@ -88,7 +93,7 @@
         </el-row>
       </div>
     </el-dialog>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -98,11 +103,23 @@ import { queryUsecDep, addUsrsecDep, removeUsrSecDep } from '@/api/sysdirectory'
 export default {
   name: 'DepSelector',
   props: {
+    // 一级部门编号
     pdepid: {
       default: '',
       type: String
     },
+    // 一级部门名称
     pdepname: {
+      default: '',
+      type: String
+    },
+    // 二级部门编号
+    secdepid: {
+      default: '',
+      type: String
+    },
+    // 二级部门名称
+    secdepname: {
       default: '',
       type: String
     }
@@ -133,13 +150,14 @@ export default {
     }
   },
   created() {
-    // this.fetchUsrSelecting()
+
   },
   methods: {
+    // 打开二级部门人员管理对话框
     openDepSec: function() {
+      console.log(this.pdepid, this.secdepid)
       this.depDialogvisable = true
       this.fetchUsrSelecting()
-      this.fetchSelectedUsr()
     },
 
     depClick: function() {
@@ -148,6 +166,7 @@ export default {
 
     // 获取所有待选择的人员
     fetchUsrSelecting() {
+      this.selectcondtion.search.depid = this.pdepid
       getPeopleSelect(this.selectcondtion).then(response => {
         const data = response.data
         // 总的页数
@@ -178,7 +197,7 @@ export default {
 
     // 加载已经选择的用户
     fetchSelectedUsr() {
-      queryUsecDep(this.pdepid).then(resp => {
+      queryUsecDep(this.secdepid).then(resp => {
         this.selectedUsr = resp.data
       })
     },
@@ -197,14 +216,15 @@ export default {
 
     // 选择用户
     handlerSelect(row) {
+      console.log(this.secdepid, row.workerid)
       addUsrsecDep({
-        secdepid: this.pdepid,
+        secdepid: this.secdepid,
         usrid: row.workerid
       }).then(resp => {
         if (resp.ok === true) {
           this.$message.success('选择成功')
-          this.fetchSelectedUsr()
-          this.fetchUsrSelecting()
+          this.fetchSelectedUsr()// 加载已经选择过的
+          this.fetchUsrSelecting() // 加载部门其他信息
         } else {
           this.$message.error('操作失败')
         }
@@ -234,5 +254,9 @@ export default {
   text-align: center;
   background: #EBEEF5;
   color:#409EFF;
+}
+
+.v-modal {
+  display:none !important;
 }
 </style>

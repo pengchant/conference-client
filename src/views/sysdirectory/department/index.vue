@@ -1,5 +1,57 @@
 <template>
   <div style="width:90%;margin: 0 auto;">
+    <!-- 修改模态框 -->
+    <el-dialog :visible.sync="sdialogFormVisible" width="50%" title="修改二级部门">
+      <el-form :model="sdepartmentform">
+        <el-form-item label-width="120px" label="二级部门名称">
+          <el-input v-model="sdepartmentform.depname" clearable placeholder="请输入二级部门名称"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="sdialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="ssuremodify">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 新增模态框 -->
+    <el-dialog :visible.sync="snewFormVisible" width="50%" title="新增二级部门">
+      <el-form :model="sdepartmentform">
+        <el-form-item label-width="120px" label="二级部门名称">
+          <el-input v-model="sdepartmentform.depname" clearable placeholder="请输入二级部门名称"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="snewFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="ssureAddSecondDep">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 修改模态框 -->
+    <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改部门">
+      <el-form :model="departmentform">
+        <el-form-item label-width="120px" label="部门名称">
+          <el-input v-model="departmentform.departname" clearable placeholder="请输入部门名称"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="suremodify">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 新增模态框 -->
+    <el-dialog :visible.sync="newFormVisible" width="50%" title="新增部门">
+      <el-form :model="departmentform">
+        <el-form-item label-width="120px" label="部门名称">
+          <el-input v-model="departmentform.departname" clearable placeholder="请输入部门名称"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="newFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sureAddSemester">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <div style="margin-top:20px;">
       <el-row :gutter="5">
         <el-col :span="6">
@@ -60,32 +112,6 @@
       layout="prev, pager, next"
       @current-change="handlecurrentchange"/>
 
-    <!-- 修改模态框 -->
-    <el-dialog :visible.sync="dialogFormVisible" width="50%" title="修改部门">
-      <el-form :model="departmentform">
-        <el-form-item label-width="120px" label="部门名称">
-          <el-input v-model="departmentform.departname" clearable placeholder="请输入部门名称"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="suremodify">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 新增模态框 -->
-    <el-dialog :visible.sync="newFormVisible" width="50%" title="新增部门">
-      <el-form :model="departmentform">
-        <el-form-item label-width="120px" label="部门名称">
-          <el-input v-model="departmentform.departname" clearable placeholder="请输入部门名称"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="sureAddSemester">确 定</el-button>
-      </div>
-    </el-dialog>
-
     <!-- 二级部门管理模态框 -->
     <el-dialog
       :visible.sync="secondDepvisiable"
@@ -120,7 +146,12 @@
               size="mini"
               type="danger"
               @click="shandleDelete(scope.$index, scope.row)"><i class="el-icon-delete "/>删除</el-button>
-            <DepSelector :pdepname="secondHandlerDep" :pdepid="s_conditions.search.depid + ''" />
+            <DepSelector
+              :pdepname="secondHandlerDep"
+              :pdepid="s_conditions.search.depid + ''"
+              :secdepid="scope.row.id+''"
+              :secdepname="scope.row.depname"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -132,32 +163,6 @@
         background
         layout="prev, pager, next"
         @current-change="shandlecurrentchange"/>
-    </el-dialog>
-
-    <!-- 修改模态框 -->
-    <el-dialog :visible.sync="sdialogFormVisible" width="50%" title="修改二级部门">
-      <el-form :model="sdepartmentform">
-        <el-form-item label-width="120px" label="二级部门名称">
-          <el-input v-model="sdepartmentform.depname" clearable placeholder="请输入二级部门名称"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="sdialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="ssuremodify">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 新增模态框 -->
-    <el-dialog :visible.sync="snewFormVisible" width="50%" title="新增二级部门">
-      <el-form :model="sdepartmentform">
-        <el-form-item label-width="120px" label="二级部门名称">
-          <el-input v-model="sdepartmentform.depname" clearable placeholder="请输入二级部门名称"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="snewFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="ssureAddSecondDep">确 定</el-button>
-      </div>
     </el-dialog>
 
   </div>
@@ -449,3 +454,4 @@ export default {
   }
 }
 </script>
+
