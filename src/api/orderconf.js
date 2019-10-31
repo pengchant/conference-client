@@ -187,6 +187,17 @@ export function loadDepUsers(param) {
 }
 
 /**
+ * 加载当前用户所在部门下的所有二级部门
+ * @param  param
+ */
+export function queryAllSecDep(param) {
+  return request({
+    url: '/comm/' + param + '/queryAllSecDep',
+    method: 'post'
+  })
+}
+
+/**
  * 删除用户提交的额会议预约
  */
 export function removeOrderConf(param) {

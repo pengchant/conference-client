@@ -150,12 +150,12 @@ export default {
     }
   },
   created() {
-
+    console.log('接收到的二级部门编号:' + this.secdepid + ', 一级部门的编号:' + this.pdepid)
   },
   methods: {
     // 打开二级部门人员管理对话框
     openDepSec: function() {
-      console.log(this.pdepid, this.secdepid)
+      console.log('一级部门的编号' + this.pdepid, '二级部门的编号' + this.secdepid)
       this.depDialogvisable = true
       this.fetchUsrSelecting()
     },
@@ -166,39 +166,49 @@ export default {
 
     // 获取所有待选择的人员
     fetchUsrSelecting() {
-      this.selectcondtion.search.depid = this.pdepid
-      getPeopleSelect(this.selectcondtion).then(response => {
-        const data = response.data
-        // 总的页数
-        this.stotal = data.total
-        // 当前页数
-        this.scurrentPage = data.pageNum
-        // 绑定选择的数据
-        this.selectingdata = data.list
-        const selectedUsrs = this.selectedUsr
-        var _that = this
-        this.selectingdata.map((val, index, arr) => {
-          for (var i = 0; i < selectedUsrs.length; i++) {
-            if (val.workerid === selectedUsrs[i].workerid) {
-              _that.$set(_that.selectingdata[index], 'selected', true)
+      var _current = this
+      // 请求已经选择过的人员
+      this.fetchSelectedUsr(function() {
+        // 设置一级部门的编号
+        _current.selectcondtion.search.depid = _current.pdepid
+        getPeopleSelect(_current.selectcondtion).then(response => {
+          const data = response.data
+          // 总的页数
+          _current.stotal = data.total
+          // 当前页数
+          _current.scurrentPage = data.pageNum
+          // 绑定选择的数据
+          _current.selectingdata = data.list
+          const selectedUsrs = _current.selectedUsr // 拿到已经选择的人员
+          // 设置已经选择过的人员标记为选中状态
+          _current.selectingdata.map((val, index, arr) => {
+            for (var i = 0; i < selectedUsrs.length; i++) {
+              if (val.workerid === selectedUsrs[i].workerid) {
+                _current.$set(_current.selectingdata[index], 'selected', true)
+              }
             }
-          }
+          })
         })
       })
     },
+    // 用户点击页面跳转
     handleUsrChange(val) {
       this.scurrentPage = val
       this.selectcondtion.page = val
       this.fetchUsrSelecting()
     },
+    // 重新搜索
     research() {
       this.fetchUsrSelecting()
     },
 
     // 加载已经选择的用户
-    fetchSelectedUsr() {
+    fetchSelectedUsr(afterhandler) {
       queryUsecDep(this.secdepid).then(resp => {
         this.selectedUsr = resp.data
+        if (afterhandler instanceof Function) {
+          afterhandler()
+        }
       })
     },
 
@@ -206,8 +216,7 @@ export default {
     removeUsr(row) {
       removeUsrSecDep(row.id).then(resp => {
         if (resp.ok) {
-          this.fetchSelectedUsr() // 重新加载数据
-          this.fetchUsrSelecting()
+          this.fetchUsrSelecting() // 重新加载数据
         } else {
           this.$message.error('对不起删除失败!')
         }
@@ -216,14 +225,12 @@ export default {
 
     // 选择用户
     handlerSelect(row) {
-      console.log(this.secdepid, row.workerid)
       addUsrsecDep({
         secdepid: this.secdepid,
         usrid: row.workerid
       }).then(resp => {
         if (resp.ok === true) {
           this.$message.success('选择成功')
-          this.fetchSelectedUsr()// 加载已经选择过的
           this.fetchUsrSelecting() // 加载部门其他信息
         } else {
           this.$message.error('操作失败')

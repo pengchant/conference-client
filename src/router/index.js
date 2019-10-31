@@ -71,20 +71,6 @@ export const constantRouterMap = [
     ]
   },
 
-  // 直接开会
-  {
-    path: '/directstart/',
-    component: Layout,
-    redirect: 'noredirect',
-    meta: {
-      title: '会议记录',
-      icon: 'zjkh'
-    },
-    children: [
-      { path: '/directstart/record', meta: { title: '直接开会' }, name: 'Directrecord', component: () => import('@/views/record/directstart/index') }
-    ]
-  },
-
   // 会议记录
   {
     path: '/confrecord/',
@@ -98,7 +84,8 @@ export const constantRouterMap = [
       { path: '/confrecord/directstart', hidden: true, meta: { title: '直接开会' }, name: 'directst', component: () => import('@/views/record/directstart') },
       { path: '/confrecord/recconf', hidden: true, meta: { title: '进行中会议' }, name: 'record', component: () => import('@/views/record/recconf') },
       { path: '/confrecord/validating', meta: { title: '已提交待审核' }, name: 'Validating', component: () => import('@/views/record/validating') },
-      { path: '/confrecord/validated', meta: { title: '审核会议记录' }, name: 'Validated', component: () => import('@/views/record/validated') }
+      { path: '/confrecord/validated', meta: { title: '审核会议记录' }, name: 'Validated', component: () => import('@/views/record/validated') },
+      { path: '/confrecord/record', meta: { title: '直接开会（临时会议）' }, name: 'Directrecord', component: () => import('@/views/record/directstart/index') }
     ]
   },
 
